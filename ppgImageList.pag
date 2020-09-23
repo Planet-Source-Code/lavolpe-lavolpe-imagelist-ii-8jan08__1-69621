@@ -1,0 +1,2972 @@
+VERSION 5.00
+Begin VB.PropertyPage ppgImageList 
+   Caption         =   "Custom Image List"
+   ClientHeight    =   4140
+   ClientLeft      =   0
+   ClientTop       =   0
+   ClientWidth     =   4860
+   KeyPreview      =   -1  'True
+   PaletteMode     =   0  'Halftone
+   ScaleHeight     =   4140
+   ScaleWidth      =   4860
+   Begin VB.PictureBox picBase 
+      BorderStyle     =   0  'None
+      Height          =   3960
+      Left            =   30
+      OLEDropMode     =   1  'Manual
+      ScaleHeight     =   3960
+      ScaleWidth      =   4815
+      TabIndex        =   6
+      Top             =   120
+      Width           =   4815
+      Begin VB.CommandButton cmdAct 
+         Caption         =   "Abort"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   -1  'True
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   390
+         Index           =   5
+         Left            =   3555
+         Style           =   1  'Graphical
+         TabIndex        =   42
+         ToolTipText     =   "Unload pasted or browsed image(s)"
+         Top             =   2700
+         Visible         =   0   'False
+         Width           =   1140
+      End
+      Begin VB.Timer tmrDragging 
+         Enabled         =   0   'False
+         Interval        =   250
+         Left            =   480
+         Top             =   1425
+      End
+      Begin VB.CheckBox chkScale 
+         Caption         =   "Scale when saving"
+         Height          =   270
+         Left            =   1350
+         TabIndex        =   25
+         ToolTipText     =   "Scale to size or stretch"
+         Top             =   1320
+         Value           =   1  'Checked
+         Width           =   2115
+      End
+      Begin VB.CheckBox chkUseMask 
+         Caption         =   "Mask Color Used"
+         Enabled         =   0   'False
+         Height          =   375
+         Left            =   1770
+         TabIndex        =   24
+         ToolTipText     =   "Mask a color before adding to image list"
+         Top             =   1575
+         Width           =   1710
+      End
+      Begin VB.ComboBox cboKey 
+         Height          =   315
+         Left            =   2715
+         Sorted          =   -1  'True
+         Style           =   2  'Dropdown List
+         TabIndex        =   7
+         Top             =   180
+         Width           =   1965
+      End
+      Begin VB.PictureBox picImages 
+         Appearance      =   0  'Flat
+         Enabled         =   0   'False
+         ForeColor       =   &H80000008&
+         Height          =   510
+         Left            =   90
+         OLEDropMode     =   1  'Manual
+         ScaleHeight     =   480
+         ScaleWidth      =   4320
+         TabIndex        =   23
+         ToolTipText     =   "Image list thumbnails"
+         Top             =   3105
+         Width           =   4350
+         Begin VB.Label Label1 
+            Alignment       =   2  'Center
+            BackColor       =   &H000000FF&
+            Caption         =   "Avoid Moving Controls - They are aligned carefully with respect to other controls on this page"
+            Enabled         =   0   'False
+            ForeColor       =   &H00FFFFFF&
+            Height          =   450
+            Index           =   1
+            Left            =   30
+            TabIndex        =   41
+            Top             =   15
+            Visible         =   0   'False
+            Width           =   4260
+         End
+      End
+      Begin VB.HScrollBar picScroll 
+         Height          =   270
+         LargeChange     =   8
+         Left            =   90
+         Max             =   100
+         Min             =   1
+         TabIndex        =   22
+         TabStop         =   0   'False
+         Top             =   3660
+         Value           =   1
+         Visible         =   0   'False
+         Width           =   4605
+      End
+      Begin VB.TextBox txtKeyTag 
+         Height          =   300
+         Index           =   1
+         Left            =   2265
+         MaxLength       =   256
+         TabIndex        =   12
+         ToolTipText     =   "Image Tag: Max 256 characters"
+         Top             =   2385
+         Width           =   1215
+      End
+      Begin VB.ComboBox cboIconSize 
+         Enabled         =   0   'False
+         Height          =   315
+         Left            =   1260
+         Style           =   2  'Dropdown List
+         TabIndex        =   10
+         ToolTipText     =   "Original size of image to be added to image list"
+         Top             =   1950
+         Width           =   2220
+      End
+      Begin VB.CommandButton cmdAct 
+         Caption         =   "Browse"
+         Height          =   450
+         Index           =   0
+         Left            =   3555
+         Style           =   1  'Graphical
+         TabIndex        =   8
+         ToolTipText     =   "Browse for an image file"
+         Top             =   1245
+         Width           =   1140
+      End
+      Begin VB.CommandButton cmdAct 
+         Caption         =   "X"
+         Enabled         =   0   'False
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   510
+         Index           =   1
+         Left            =   4455
+         Style           =   1  'Graphical
+         TabIndex        =   14
+         ToolTipText     =   "Delete Highlighted Image"
+         Top             =   3105
+         Width           =   255
+      End
+      Begin VB.TextBox txtKeyTag 
+         Height          =   300
+         Index           =   0
+         Left            =   540
+         MaxLength       =   256
+         TabIndex        =   11
+         ToolTipText     =   "Image Key: Max 256 characters"
+         Top             =   2385
+         Width           =   1215
+      End
+      Begin VB.CommandButton cmdAct 
+         Caption         =   "&APPEND"
+         Enabled         =   0   'False
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   450
+         Index           =   2
+         Left            =   3555
+         Style           =   1  'Graphical
+         TabIndex        =   13
+         ToolTipText     =   "Append image to image list"
+         Top             =   2235
+         Width           =   1140
+      End
+      Begin VB.CommandButton cmdMisc 
+         Caption         =   "Miscellaneous"
+         Height          =   405
+         Left            =   315
+         Style           =   1  'Graphical
+         TabIndex        =   18
+         ToolTipText     =   "Miscellaneous Options (Checkerbord, Key Change)"
+         Top             =   720
+         Width           =   1755
+      End
+      Begin VB.CommandButton cmdAct 
+         Caption         =   "Paste"
+         Height          =   450
+         Index           =   3
+         Left            =   3555
+         Style           =   1  'Graphical
+         TabIndex        =   9
+         ToolTipText     =   "Paste from clipboard"
+         Top             =   1695
+         Width           =   1140
+      End
+      Begin VB.CommandButton cmdImportExport 
+         Caption         =   "Import Export"
+         Height          =   450
+         Left            =   315
+         Style           =   1  'Graphical
+         TabIndex        =   17
+         ToolTipText     =   "Import and Export Image Lists"
+         Top             =   255
+         Width           =   1755
+      End
+      Begin VB.CheckBox chkDelay 
+         Caption         =   "Delay Loaded"
+         Height          =   240
+         Left            =   2715
+         TabIndex        =   15
+         ToolTipText     =   "Image List created when first rendered"
+         Top             =   885
+         Width           =   1635
+      End
+      Begin VB.CommandButton cmdAct 
+         Caption         =   "X"
+         Enabled         =   0   'False
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   315
+         Index           =   4
+         Left            =   4410
+         Style           =   1  'Graphical
+         TabIndex        =   16
+         ToolTipText     =   "Destroy selected image list"
+         Top             =   870
+         Width           =   255
+      End
+      Begin VB.Label lblMultiSelect 
+         Alignment       =   2  'Center
+         AutoSize        =   -1  'True
+         BackStyle       =   0  'Transparent
+         Caption         =   "X"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   195
+         Index           =   2
+         Left            =   578
+         TabIndex        =   40
+         ToolTipText     =   "Remove this image"
+         Top             =   2130
+         Visible         =   0   'False
+         Width           =   165
+      End
+      Begin VB.Label lblMultiSelect 
+         Alignment       =   2  'Center
+         AutoSize        =   -1  'True
+         BackStyle       =   0  'Transparent
+         Caption         =   ">>"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   195
+         Index           =   1
+         Left            =   915
+         TabIndex        =   39
+         ToolTipText     =   "Next image"
+         Top             =   2115
+         Visible         =   0   'False
+         Width           =   255
+      End
+      Begin VB.Label lblMultiSelect 
+         Alignment       =   2  'Center
+         AutoSize        =   -1  'True
+         BackStyle       =   0  'Transparent
+         Caption         =   "<<"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   195
+         Index           =   0
+         Left            =   165
+         TabIndex        =   38
+         ToolTipText     =   "Previous image"
+         Top             =   2115
+         Visible         =   0   'False
+         Width           =   255
+      End
+      Begin VB.Label lblIL 
+         AutoSize        =   -1  'True
+         Caption         =   "  Image Lists  "
+         Height          =   195
+         Left            =   315
+         TabIndex        =   27
+         Top             =   0
+         Width           =   975
+      End
+      Begin VB.Label lblMaskColor 
+         Appearance      =   0  'Flat
+         BackColor       =   &H00FF00FF&
+         BorderStyle     =   1  'Fixed Single
+         ForeColor       =   &H80000008&
+         Height          =   270
+         Left            =   1350
+         TabIndex        =   33
+         ToolTipText     =   "Click to change mask color"
+         Top             =   1635
+         Width           =   315
+      End
+      Begin VB.Shape shpSample 
+         BorderColor     =   &H80000011&
+         Height          =   1080
+         Left            =   135
+         Shape           =   4  'Rounded Rectangle
+         Top             =   1230
+         Width           =   1050
+      End
+      Begin VB.Label lblTxtJump 
+         Alignment       =   1  'Right Justify
+         Caption         =   "Key"
+         Height          =   330
+         Index           =   0
+         Left            =   0
+         TabIndex        =   32
+         Top             =   2415
+         Width           =   435
+      End
+      Begin VB.Label lblTxtJump 
+         Alignment       =   1  'Right Justify
+         Caption         =   "Tag"
+         Height          =   330
+         Index           =   1
+         Left            =   1725
+         TabIndex        =   31
+         Top             =   2415
+         Width           =   435
+      End
+      Begin VB.Label lblIndex 
+         Caption         =   "Image Index:  none"
+         Height          =   255
+         Left            =   150
+         TabIndex        =   30
+         Top             =   2865
+         Width           =   4515
+      End
+      Begin VB.Label Label1 
+         Alignment       =   1  'Right Justify
+         Caption         =   "Size"
+         Height          =   330
+         Index           =   0
+         Left            =   2160
+         TabIndex        =   29
+         Top             =   570
+         Width           =   435
+      End
+      Begin VB.Label lblTxtJump 
+         Alignment       =   1  'Right Justify
+         Caption         =   "Key"
+         Height          =   330
+         Index           =   2
+         Left            =   2160
+         TabIndex        =   28
+         Top             =   240
+         Width           =   435
+      End
+      Begin VB.Shape Shape1 
+         BorderColor     =   &H80000011&
+         Height          =   1110
+         Left            =   105
+         Top             =   75
+         Width           =   4590
+      End
+      Begin VB.Label lblSize 
+         Alignment       =   2  'Center
+         Height          =   270
+         Left            =   2715
+         TabIndex        =   26
+         ToolTipText     =   "Size of selected image list"
+         Top             =   570
+         Width           =   1950
+      End
+   End
+   Begin VB.PictureBox picMsgBox 
+      BackColor       =   &H00FFFFFF&
+      Enabled         =   0   'False
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   177
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00FF0000&
+      Height          =   1185
+      Left            =   135
+      ScaleHeight     =   75
+      ScaleMode       =   3  'Pixel
+      ScaleWidth      =   306
+      TabIndex        =   34
+      Top             =   120
+      Visible         =   0   'False
+      Width           =   4650
+      Begin VB.CommandButton cmdMsgOk 
+         Caption         =   "&Ok"
+         Height          =   450
+         Index           =   2
+         Left            =   1125
+         TabIndex        =   37
+         Top             =   615
+         Visible         =   0   'False
+         Width           =   1140
+      End
+      Begin VB.CommandButton cmdMsgOk 
+         Caption         =   "&Ok"
+         Height          =   450
+         Index           =   1
+         Left            =   2265
+         TabIndex        =   35
+         Top             =   615
+         Visible         =   0   'False
+         Width           =   1140
+      End
+      Begin VB.CommandButton cmdMsgOk 
+         Caption         =   "&Ok"
+         Height          =   450
+         Index           =   0
+         Left            =   3405
+         TabIndex        =   36
+         Top             =   615
+         Width           =   1140
+      End
+   End
+   Begin VB.PictureBox picNewList 
+      Height          =   1575
+      Left            =   135
+      ScaleHeight     =   1515
+      ScaleWidth      =   4530
+      TabIndex        =   0
+      Top             =   1335
+      Visible         =   0   'False
+      Width           =   4590
+      Begin VB.CommandButton cmdCreateIL 
+         Caption         =   "Cancel"
+         Height          =   390
+         Index           =   1
+         Left            =   2175
+         TabIndex        =   5
+         ToolTipText     =   "Abort procedure"
+         Top             =   1035
+         Width           =   2325
+      End
+      Begin VB.CommandButton cmdCreateIL 
+         Caption         =   "Create"
+         Height          =   390
+         Index           =   0
+         Left            =   2160
+         TabIndex        =   4
+         ToolTipText     =   "Create new Image List"
+         Top             =   255
+         Width           =   2325
+      End
+      Begin VB.TextBox txtILID 
+         Height          =   345
+         Index           =   2
+         Left            =   1335
+         TabIndex        =   3
+         ToolTipText     =   "Height of images in the image list"
+         Top             =   1080
+         Width           =   675
+      End
+      Begin VB.TextBox txtILID 
+         Height          =   345
+         Index           =   1
+         Left            =   1335
+         TabIndex        =   2
+         ToolTipText     =   "Width of images in the image list"
+         Top             =   675
+         Width           =   675
+      End
+      Begin VB.TextBox txtILID 
+         Height          =   375
+         Index           =   0
+         Left            =   165
+         TabIndex        =   1
+         Text            =   "Key"
+         ToolTipText     =   "Image List Key: Max 256 characters"
+         Top             =   270
+         Width           =   1845
+      End
+      Begin VB.Label lblILID 
+         Caption         =   "Image Height"
+         Height          =   255
+         Index           =   2
+         Left            =   120
+         TabIndex        =   21
+         Top             =   1125
+         Width           =   1200
+      End
+      Begin VB.Label lblILID 
+         Caption         =   "Image Width"
+         Height          =   255
+         Index           =   1
+         Left            =   120
+         TabIndex        =   20
+         Top             =   735
+         Width           =   1200
+      End
+      Begin VB.Label lblILID 
+         Caption         =   "Key for the Image List"
+         Height          =   255
+         Index           =   0
+         Left            =   180
+         TabIndex        =   19
+         Top             =   30
+         Width           =   1815
+      End
+   End
+End
+Attribute VB_Name = "ppgImageList"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = True
+Attribute VB_PredeclaredId = False
+Attribute VB_Exposed = True
+Option Explicit
+
+' This property page can be excluded from the usercontrol when compile time comes.
+' If just need a run-time only version of the imagelist, do not compile with the property page -- will reduce size.
+'   Run-time only purposes?  Maybe you have a database with images or a subfolder or resource file
+'   that contains images. In that case, create the imagelist via code and then load images as needed
+
+
+' used to create on-screen messagebox. See DoMsgBox
+Private Declare Function DrawText Lib "user32.dll" Alias "DrawTextA" (ByVal hDC As Long, ByVal lpStr As String, ByVal nCount As Long, ByRef lpRect As RECT, ByVal wFormat As Long) As Long
+Private Declare Function OffsetRect Lib "user32.dll" (ByRef lpRect As RECT, ByVal X As Long, ByVal Y As Long) As Long
+Private Declare Function SetWindowLong Lib "user32.dll" Alias "SetWindowLongA" (ByVal hwnd As Long, ByVal nIndex As Long, ByVal dwNewLong As Long) As Long
+Private Declare Function GetWindowLong Lib "user32.dll" Alias "GetWindowLongA" (ByVal hwnd As Long, ByVal nIndex As Long) As Long
+Private Declare Function SetWindowPos Lib "user32.dll" (ByVal hwnd As Long, ByVal hWndInsertAfter As Long, ByVal X As Long, ByVal Y As Long, ByVal cX As Long, ByVal cY As Long, ByVal wFlags As Long) As Long
+
+Private Declare Sub InitCommonControls Lib "comctl32.dll" ()
+Private Declare Sub CopyMemory Lib "kernel32.dll" Alias "RtlMoveMemory" (ByRef Destination As Any, ByRef Source As Any, ByVal Length As Long)
+Private Declare Sub FillMemory Lib "kernel32.dll" Alias "RtlFillMemory" (ByRef Destination As Any, ByVal Length As Long, ByVal Fill As Byte)
+' Using APIs for Folder Browser dialog to provide unicode filename support
+Private Type BrowseInfo
+    hWndOwner As Long
+    pIDLRoot As Long
+    pszDisplayName As Long
+    lpszTitle As Long
+    ulFlags As Long
+    lpfnCallback As Long
+    lParam As Long
+    iImage As Long
+End Type
+Private Declare Sub CoTaskMemFree Lib "ole32.dll" (ByVal hMem As Long)
+Private Declare Function SHBrowseForFolderA Lib "shell32" (lpBI As BrowseInfo) As Long
+Private Declare Function SHGetPathFromIDListA Lib "shell32" (ByVal pidList As Long, ByVal lpBuffer As Long) As Long
+Private Declare Function SHBrowseForFolderW Lib "shell32" (lpBI As BrowseInfo) As Long
+Private Declare Function SHGetPathFromIDListW Lib "shell32" (ByVal pidList As Long, ByVal lpBuffer As Long) As Long
+
+' used to read/write files, supporting unicode paths & filenames
+Private Declare Function CloseHandle Lib "kernel32" (ByVal hObject As Long) As Long
+Private Declare Function ReadFile Lib "kernel32.dll" (ByVal hFile As Long, ByRef lpBuffer As Any, ByVal nNumberOfBytesToRead As Long, ByRef lpNumberOfBytesRead As Long, ByRef lpOverlapped As Any) As Long
+Private Declare Function SetFilePointer Lib "kernel32.dll" (ByVal hFile As Long, ByVal lDistanceToMove As Long, ByRef lpDistanceToMoveHigh As Long, ByVal dwMoveMethod As Long) As Long
+Private Declare Function WriteFile Lib "kernel32" (ByVal hFile As Long, lpBuffer As Any, ByVal nNumberOfBytesToWrite As Long, lpNumberOfBytesWritten As Long, lpOverlapped As Any) As Long
+Private Declare Function GetFileSize Lib "kernel32.dll" (ByVal hFile As Long, ByRef lpFileSizeHigh As Long) As Long
+
+' Using APIs for a File Open dialog to provide unicode filename support
+Private Declare Function CommDlgExtendedError Lib "comdlg32.dll" () As Long
+Private Declare Function GetSaveFileNameW Lib "comdlg32.dll" (ByRef pOpenfilename As OPENFILENAME) As Long
+Private Declare Function GetSaveFileNameA Lib "comdlg32.dll" (ByRef pOpenfilename As OPENFILENAME) As Long
+Private Declare Function GetOpenFileNameW Lib "comdlg32.dll" (pOpenfilename As OPENFILENAME) As Long
+Private Declare Function GetOpenFileName Lib "comdlg32.dll" Alias "GetOpenFileNameA" (pOpenfilename As OPENFILENAME) As Long
+Private Declare Function GetDesktopWindow Lib "user32.dll" () As Long
+Private Declare Function IsWindowUnicode Lib "user32.dll" (ByVal hwnd As Long) As Long
+Private Declare Function lstrlenW Lib "kernel32.dll" (lpString As Any) As Long
+Private Declare Function lstrlen Lib "kernel32.dll" Alias "lstrlenA" (ByVal lpString As String) As Long
+Private Const OFN_DONTADDTORECENT As Long = &H2000000
+Private Const OFN_ENABLESIZING As Long = &H800000
+Private Const OFN_EXPLORER As Long = &H80000
+Private Const OFN_FILEMUSTEXIST As Long = &H1000
+Private Const OFN_LONGNAMES As Long = &H200000
+Private Const OFN_CREATEPROMPT As Long = &H2000
+Private Const OFN_EXTENSIONDIFFERENT As Long = &H400
+Private Const OFN_OVERWRITEPROMPT As Long = &H2
+Private Const OFN_NOCHANGEDIR As Long = &H8
+Private Const OFN_ALLOWMULTISELECT As Long = &H200
+Private Type OPENFILENAME
+     lStructSize As Long
+     hWndOwner As Long
+     hInstance As Long
+     lpstrFilter As String
+     lpstrCustomFilter As String
+     nMaxCustFilter As Long
+     nFilterIndex As Long
+     lpstrFile As String
+     nMaxFile As Long
+     lpstrFileTitle As String
+     nMaxFileTitle As Long
+     lpstrInitialDir As String
+     lpstrTitle As String
+     Flags As Long
+     nFileOffset As Integer
+     nFileExtension As Integer
+     lpstrDefExt As String
+     lCustData As Long
+     lpfnHook As Long
+     lpTemplateName As String
+End Type
+
+' used to display color dialog
+Private Declare Function CHOOSECOLOR Lib "comdlg32.dll" Alias "ChooseColorA" (lpcc As CHOOSECOLORSTRUCT) As Long
+Private Type CHOOSECOLORSTRUCT  ' 36 bytes; for the color dialog box
+   lStructSize     As Long
+   hWndOwner       As Long
+   hInstance       As Long
+   rgbResult       As Long
+   lpCustColors    As Long
+   Flags           As Long
+   lCustData       As Long
+   lpfnHook        As Long
+   lpTemplateName  As String
+End Type
+
+' show currently selected image in the imagelist scroll area
+Private Declare Function DrawFocusRect Lib "user32.dll" (ByVal hDC As Long, ByRef lpRect As RECT) As Long
+Private Type RECT
+    Left As Long
+    Top As Long
+    Right As Long
+    Bottom As Long
+End Type
+Private Declare Function GetSysColor Lib "user32.dll" (ByVal nIndex As Long) As Long
+
+' allow menus on the property page
+Private Declare Function CreatePopupMenu Lib "user32.dll" () As Long
+Private Declare Function AppendMenu Lib "user32.dll" Alias "AppendMenuA" (ByVal hMenu As Long, ByVal wFlags As Long, ByVal wIDNewItem As Long, ByVal lpNewItem As Any) As Long
+Private Declare Function DestroyMenu Lib "user32.dll" (ByVal hMenu As Long) As Long
+Private Declare Function TrackPopupMenu Lib "user32.dll" (ByVal hMenu As Long, ByVal wFlags As Long, ByVal X As Long, ByVal Y As Long, ByVal nReserved As Long, ByVal hwnd As Long, ByRef lprc As RECT) As Long
+Private Const TPM_LEFTALIGN As Long = &H0&
+Private Const TPM_NOANIMATION As Long = &H4000&
+Private Const TPM_RETURNCMD As Long = &H100&
+Private Const TPM_TOPALIGN As Long = &H0&
+Private Const MF_STRING As Long = &H0&
+Private Const MF_SEPARATOR As Long = &H800&
+Private Const MF_CHECKED As Long = &H8&
+Private Const MF_GRAYED As Long = &H1&
+Private Const MF_DISABLED As Long = &H2& Or MF_GRAYED
+Private Declare Function GetCursorPos Lib "user32.dll" (ByRef lpPoint As POINTAPI) As Long
+Private Type POINTAPI
+    X As Long
+    Y As Long
+End Type
+
+' used to set combo boxes without triggering "Click" event
+Private Declare Function SendMessage Lib "user32.dll" Alias "SendMessageA" (ByVal hwnd As Long, ByVal wMsg As Long, ByVal wParam As Long, ByRef lParam As Any) As Long
+Private Const CB_SETCURSEL As Long = &H14E
+
+Private Declare Function InvertRect Lib "user32.dll" (ByVal hDC As Long, ByRef lpRect As RECT) As Long
+Private Declare Function InvalidateRect Lib "user32.dll" (ByVal hwnd As Long, ByRef lpRect As RECT, ByVal bErase As Long) As Long
+Private Declare Function BitBlt Lib "gdi32.dll" (ByVal hDestDC As Long, ByVal X As Long, ByVal Y As Long, ByVal nWidth As Long, ByVal nHeight As Long, ByVal hSrcDC As Long, ByVal xSrc As Long, ByVal ySrc As Long, ByVal dwRop As Long) As Long
+
+' clone actions, allowing rollback of some changes if user opts
+Private Enum eCloneActions
+    cloneCreate = 1
+    cloneRestore = 2
+    cloneRelease = 3
+End Enum
+' reference for the command buttons (makes reading code a bit easier)
+Private Enum eCmdActions
+    cmd_Browse = 0
+    cmd_DelImage = 1
+    cmd_Append = 2
+    cmd_Paste = 3
+    cmd_DelList = 4
+    cmd_Abort = 5
+End Enum
+' reference for msgbox actions (makes debugging code a bit easier)
+Private Enum eMsgBoxActions
+    mbox_DoNothing = 0
+    mbox_DeleteList = 1
+    mbox_UpdateResume = 2
+    mbox_KeyRedoImage = 3
+    mbox_KeyRedoList = 4
+    mbox_WidthRedo = 5
+    mbox_HeightRedo = 6
+    mbox_RefreshAll = 7
+    mbox_DeleteAll = 8
+    mbox_UpdateAbort = 9
+End Enum
+
+Private Const m_ImageSize As Long = 32&
+
+Private m_ChkrBoard As Boolean          ' checkerboard used or not
+Private rDisplay As RECT                ' the checkboard position
+Private rInverse As RECT                ' color inversion rectangle (used when re-ordering images)
+Private m_BeepOk As Boolean             ' option to turn msgbox beeps off within property page
+
+Private m_Lists() As cImageList         ' array of current imagelists
+Private cImageListNow As cImageList     ' the imagelist currently being shown/modified
+Private uc_ImageControl As lvImageList  ' reference to the imagelist control in IDE
+Private cCkrBrd As c32bppDIB            ' checkerboard bkg
+Private cDIB As c32bppDIB               ' image browsed/pasted/dropped
+
+Private m_MultiFileList() As String     ' option for multiple select images
+Private m_MultiFileKeyTag() As String   ' tags for multiple select images
+Private m_MultiFileMasks() As Long      ' mask colors for multiple select images
+Private m_IndexMultiFile As Long        ' index into multiple files
+
+Private m_ItemSelected As Long          ' currently selected image
+Private m_LastItemSelected As Long      ' previously selected image
+Private m_DragIndex As Long             ' insert index when re-ordering images
+Private m_DragStart As Long             ' used to determine when dragging starts
+
+Private m_Dirty As Boolean              ' used to prevent VB from resetting Changed property
+Private m_KeyTagDirty As Boolean        ' see picbase.mousedown & picImages.mousedown
+
+Private Sub cboIconSize_Click()
+    ' Available when a image is loaded that has multiple resolutions (icons)
+    
+    If cDIB Is Nothing Then Exit Sub
+    If m_IndexMultiFile > vbDefault Then Exit Sub
+    
+    If cboIconSize.Tag = vbNullString Then
+        If cDIB.Alpha Then
+            chkUseMask.Enabled = False
+            lblMaskColor.BackColor = GetSysColor((vbButtonFace And &HFF))
+        Else
+            chkUseMask.Enabled = True
+            lblMaskColor.BackColor = cDIB.GetPixel(vbDefault, vbDefault)
+        End If
+        chkUseMask.Tag = "NoAction": chkUseMask.Value = vbDefault: chkUseMask.Tag = vbNullString
+        RenderSample
+    End If
+End Sub
+
+Private Sub cboKey_Click()
+    
+    ' A key has been selected
+    ' if last imagelist selected was not this imagelist, release any cloning
+    If Not cImageListNow Is Nothing Then
+        If cboKey.ListIndex < cboKey.ListCount - 1 Then ' not newlist selection
+            ' see if user selected same key
+            If ObjPtr(cImageListNow) = cboKey.ItemData(cboKey.ListIndex) Then Exit Sub
+        End If
+    End If
+    
+    If Changed Then
+        DoMsgBox "You have made changes to this image list. Save those changes?", mbox_UpdateResume, vbCancel, vbNo, vbYes
+        Exit Sub
+    End If
+    
+    If Not cImageListNow Is Nothing Then
+        cImageListNow.Images.xcom_Clone cloneRelease
+        Set cImageListNow = Nothing
+    End If
+    
+    Dim Index As Long
+    If cboKey.ListIndex = cboKey.ListCount - 1 Then ' creating new imagelist
+        
+        picBase.Enabled = False
+        picMsgBox.Visible = False
+        picNewList.Visible = True
+        txtILID(vbDefault).Text = "Key"
+        For Index = 1 To txtILID.UBound
+            txtILID(Index).Text = vbNullString
+            txtILID(Index).Enabled = True
+        Next
+        picNewList.ZOrder
+        picImages.Cls
+        picImages.Enabled = False
+        picScroll.Visible = False
+        m_ItemSelected = vbDefault: m_LastItemSelected = vbDefault
+        lblSize.Caption = vbNullString
+        lblIndex.Caption = vbNullString
+        cmdAct(cmd_DelImage).Enabled = False
+        cmdAct(cmd_DelList).Enabled = False
+        cmdAct(cmd_Abort).Visible = False
+        m_ItemSelected = vbDefault: m_LastItemSelected = m_ItemSelected
+        If cDIB Is Nothing Then
+            For Index = txtKeyTag.LBound To txtKeyTag.UBound
+                txtKeyTag(Index).Text = vbNullString
+            Next
+            cboIconSize.Clear
+        End If
+        On Error Resume Next
+        txtILID(vbDefault).SetFocus
+        If Err Then Err.Clear
+        
+    Else ' changing imagelists
+    
+        ' set new current imagelist & clone it
+        picScroll.Value = picScroll.Min
+        picScroll.Tag = picScroll.Value
+        Set cImageListNow = uc_ImageControl.ImageLists(cboKey.Text)
+        cImageListNow.Images.xcom_Clone cloneCreate      ' allows rollbacks
+    
+        cmdAct(cmd_DelList).Enabled = True
+        picBase.Enabled = True
+        picImages.Enabled = True
+        chkDelay.Tag = "na": chkDelay.Value = Abs(cImageListNow.Images.DelayLoaded): chkDelay.Tag = vbNullString
+        With cImageListNow
+            lblSize.Caption = Format(.Width, "00000") & " x " & Format(.Height, "00000")
+        End With
+        If cImageListNow.Images.Count = vbDefault Then
+            picImages.Cls
+            cmdAct(cmd_DelImage).Enabled = False
+            picImages.Enabled = False
+            picScroll.Visible = False
+            picScroll.Max = picScroll.Value
+            m_ItemSelected = vbDefault
+            lblIndex.Caption = vbNullString
+            If cDIB Is Nothing Then
+                picBase.Cls
+                For Index = txtKeyTag.LBound To txtKeyTag.UBound
+                    txtKeyTag(Index).Text = vbNullString
+                Next
+            End If
+        Else
+            picImages.Enabled = True
+            cmdAct(cmd_DelImage).Enabled = True
+            If cImageListNow.Images.Count < 10 Then
+                picScroll.Visible = False
+            Else
+                picScroll.Max = cImageListNow.Images.Count - 8
+                picScroll.Visible = True
+            End If
+            If cImageListNow.Images.Count Then m_ItemSelected = 1
+            If cDIB Is Nothing Then
+                m_LastItemSelected = vbDefault
+            Else
+                m_LastItemSelected = 1
+            End If
+            RefreshScroll
+        End If
+        If Not cDIB Is Nothing Then
+            If m_IndexMultiFile Then
+                Call lblMultiSelect_Click(-1)
+            Else
+                LoadExternalImages vbNullString
+            End If
+        End If
+    End If
+    picBase.Refresh
+    
+End Sub
+
+Private Sub chkDelay_Click()
+    If cboKey.ListIndex < cboKey.ListCount - 1 Then
+        If chkDelay.Tag = vbNullString Then ' update imagelist DelayLoad property
+            cImageListNow.Images.DelayLoaded = (chkDelay.Value = 1)
+            Changed = True
+            m_Dirty = True
+        End If
+    Else
+        chkDelay.Value = vbDefault
+    End If
+End Sub
+
+Private Sub chkUseMask_Click()
+    ' option to use a mask when appending an image
+    ' forecolor is used to track original color non-masked color
+    ' backcolor is used to display mask color selected
+    If chkUseMask.Tag = vbNullString Then
+        If chkUseMask.Value = 1 Then
+            lblMaskColor.ForeColor = lblMaskColor.BackColor
+            cDIB.MakeTransparent lblMaskColor.BackColor, False
+            If m_IndexMultiFile Then m_MultiFileMasks(m_IndexMultiFile) = lblMaskColor.BackColor
+        Else
+            cDIB.MakeTransparent lblMaskColor.ForeColor, True
+            If m_IndexMultiFile Then m_MultiFileMasks(m_IndexMultiFile) = -1
+        End If
+        RenderSample
+    Else
+        chkUseMask.Tag = vbNullString
+    End If
+End Sub
+
+Private Sub cmdAct_Click(Index As Integer)
+    ' command actions
+    On Error GoTo ExitRoutine
+    Select Case Index
+    Case cmd_Browse     ' show browse window & display selected image
+        If cboKey.ListCount = 1 Then
+            DoMsgBox "You must first create at least one image list.", mbox_DoNothing, vbOK
+            Exit Sub
+        End If
+        DoBrowseWindow
+    Case cmd_DelImage   ' delete current selected image unless a browse image is now active
+        If cDIB Is Nothing Then DoDeleteImage
+    Case cmd_Append     ' add image to end of image list
+        If Not cDIB Is Nothing Then DoInsertImage
+    Case cmd_Paste      ' display pasted image, if any
+        If cboKey.ListCount = 1 Then
+            DoMsgBox "You must first create at least one image list.", mbox_DoNothing, vbOK
+            Exit Sub
+        End If
+        DoPaste
+    Case cmd_DelList    ' delete the entire image list
+        If cImageListNow.Images.Count Then
+            ' show confirmation if imagelist has any images
+            DoMsgBox "Are you sure you want to delete the entire image list?", mbox_DeleteList, vbNo, vbYes
+        Else
+            DoDeleteList
+        End If
+    Case cmd_Abort
+        Erase m_MultiFileKeyTag      ' clear multi-select arrays
+        Erase m_MultiFileList        ' and clean up
+        Erase m_MultiFileMasks
+        m_IndexMultiFile = vbDefault
+        lblMultiSelect(vbDefault).Visible = False
+        lblMultiSelect(1).Visible = False
+        lblMultiSelect(2).Visible = False
+        cmdAct(cmd_Append).Enabled = False
+        cmdAct(cmd_Abort).Visible = False
+        Set cDIB = Nothing
+        RenderThumbNail
+        DisplayImageProps
+    End Select
+ExitRoutine:
+If Err Then
+    DoMsgBox Err.Description, mbox_DoNothing, vbOK
+    Err.Clear
+End If
+End Sub
+
+Private Sub cmdImportExport_Click()
+
+    ' Allow exporting and importing of imagelists
+    
+    If Changed Then
+        DoMsgBox "You have made changes to this image list. Save those changes?", mbox_UpdateResume, vbCancel, vbNo, vbYes
+        Exit Sub
+    End If
+    
+    Dim hMenu As Long, mRtn As Long, mFlags As Long
+    Dim mRect As RECT, mPt As POINTAPI
+    Dim newList As cImageList
+    Dim bSuccess As Boolean
+    Const BIF_RETURNONLYFSDIRS = 1
+    Const MAX_PATH = 260
+
+    ' setup the popup menu
+    GetCursorPos mPt
+    hMenu = CreatePopupMenu
+    If cboKey.ListCount < 2 Then mFlags = MF_DISABLED
+    AppendMenu hMenu, MF_STRING Or mFlags, 100, ByVal "Export Current List"
+    AppendMenu hMenu, MF_STRING Or mFlags, 110, ByVal "Export All Lists"
+    AppendMenu hMenu, MF_SEPARATOR, 1962, ByVal vbNullString
+    AppendMenu hMenu, MF_STRING, 200, ByVal "Import From an Exported List"
+    AppendMenu hMenu, MF_STRING, 210, ByVal "Import From a VB Image Control"
+    AppendMenu hMenu, MF_SEPARATOR, 1962, ByVal vbNullString
+    If uc_ImageControl.ImageLists.Compression = True Then mFlags = MF_CHECKED Else mFlags = vbDefault
+    AppendMenu hMenu, MF_STRING Or mFlags, 50, ByVal "Compress Image Data"
+    
+    ' show menu & get return
+    mRtn = TrackPopupMenu(hMenu, TPM_LEFTALIGN Or TPM_NOANIMATION Or TPM_RETURNCMD Or TPM_TOPALIGN, mPt.X, mPt.Y, vbDefault, PropertyPage.hwnd, mRect)
+    DestroyMenu hMenu
+    If mRtn = vbDefault Then Exit Sub
+        
+    On Error GoTo ExitRoutine
+    Dim bUnicode As Boolean
+    Dim sFile As String
+    Dim bData() As Byte
+    Dim hFile As Long
+    
+    ' determine if unicode or ansi API calls will be made
+    bUnicode = Not (IsWindowUnicode(GetDesktopWindow) = vbDefault)
+    mFlags = mRtn
+    If mRtn = 50 Then      ' changing compression option
+        uc_ImageControl.ImageLists.Compression = (uc_ImageControl.ImageLists.Compression Xor True)
+        
+    ElseIf mRtn < 200 Then ' exporting
+    
+        Dim sPath As String
+        Dim lpIDList As Long
+        Dim udtBI As BrowseInfo, tImgList As cImageList
+        Dim Index As Long
+        Dim startList As Long, stopList As Long, listNr As Long
+        ' setup the Browse for Folder dialog
+        With udtBI
+            .hWndOwner = PropertyPage.hwnd
+            If bUnicode Then
+                bData = "Select Target Folder" & vbNullChar
+            Else
+                bData = StrConv("Select Target Folder" & vbNullChar, vbFromUnicode)
+            End If
+            .lpszTitle = VarPtr(bData(vbDefault))
+            .ulFlags = BIF_RETURNONLYFSDIRS
+        End With
+
+        'Show the 'Browse for folder' dialog
+        If bUnicode Then
+            lpIDList = SHBrowseForFolderW(udtBI)
+        Else
+            lpIDList = SHBrowseForFolderA(udtBI)
+        End If
+        Refresh
+        If lpIDList = vbDefault Then ' aborted by user
+            Exit Sub
+        Else    ' a folder PIDL returned
+            If mRtn = 100 Then  ' exporting one list
+                startList = cboKey.ListIndex
+                stopList = startList
+            Else                ' exporting all lists
+                startList = vbDefault
+                stopList = cboKey.ListCount - 2
+            End If
+            ' return PIDL as a path string
+            sPath = Space$(MAX_PATH + 1)
+            If bUnicode Then
+                mRtn = SHGetPathFromIDListW(lpIDList, ByVal StrPtr(sPath))
+            Else
+                mRtn = SHGetPathFromIDListA(lpIDList, StrPtr(sPath))
+            End If
+            CoTaskMemFree lpIDList
+    
+            If mRtn Then
+                sPath = Left$(sPath, lstrlenW(ByVal StrPtr(sPath))) & "\"
+                For listNr = startList To stopList
+                    ' get instance of imagelist to be exported
+                    Set tImgList = uc_ImageControl.ImageLists(cboKey.List(listNr))
+                    ' create unique file name
+                    sFile = "ImageList_" & Format(tImgList.Width, "00000") & "x" & Format(tImgList.Height, "00000")
+                    If iparseFileExists(sPath & sFile & ".lIL", bUnicode) Then
+                        Index = 1
+                        Do Until iparseFileExists(sPath & sFile & "(" & Index & ").lIL", bUnicode) = False
+                            Index = Index + 1
+                        Loop
+                        sFile = sPath & sFile & "(" & Index & ").LIL"
+                    Else
+                        sFile = sPath & sFile & ".LIL"
+                    End If
+                    ' try creating the file in folder selected. Permissions & disk space required
+                    hFile = iparseGetFileHandle(sFile, False, bUnicode)
+                    If hFile = -1 Then
+                        DoMsgBox "Failed to create file for " & cboKey.List(listNr), mbox_DoNothing, vbOK
+                        Exit For
+                    Else        ' export the imagelist
+                        On Error Resume Next
+                        bSuccess = uc_ImageControl.ImageLists.ExportImageList(listNr + 1, bData)
+                        If bSuccess Then
+                            WriteFile hFile, bData(LBound(bData)), UBound(bData) - LBound(bData) + 1, mRtn, ByVal vbDefault
+                        Else
+                            DoMsgBox Err.Description, mbox_DoNothing, vbOK
+                            Err.Clear
+                        End If
+                        ' close the file & reset hFile
+                        CloseHandle hFile
+                        hFile = vbDefault
+                        If bSuccess = False Then Exit For
+                    End If
+                Next
+                If listNr > stopList Then DoMsgBox "Successfully exported image list(s)", mbox_DoNothing, vbOK
+            Else
+                DoMsgBox "Failed to open that folder", mbox_DoNothing, vbOK
+            End If
+        End If
+        
+    Else  ' importing imagelist(s)
+    
+        ' prep the Open Dialog
+        Dim ofn As OPENFILENAME
+        With ofn
+            If mRtn = 200 Then ' from an exported file
+                .lpstrFilter = "Image List Exports" & vbNullChar & "*.lIL" & vbNullChar
+            Else               ' from a vb frx or ctx file
+                .lpstrFilter = "VB Forms" & vbNullChar & "*.frm" & vbNullChar & "VB User Controls" & vbNullChar & "*.ctl" & vbNullChar
+            End If
+            .lpstrFilter = ofn.lpstrFilter & "All Files" & vbNullChar & "*.*" & vbNullChar
+            .lpstrDefExt = vbNullString
+            .lpstrFile = String$(256, vbDefault)
+            .lpstrTitle = "Select ImageList Source"
+            .lpstrInitialDir = vbNullString
+            .Flags = OFN_LONGNAMES Or OFN_EXPLORER Or OFN_ENABLESIZING Or OFN_DONTADDTORECENT Or OFN_FILEMUSTEXIST
+        End With
+        ' show the Open File dialog
+        sFile = GetFileName(ofn, True)
+        If sFile = vbNullString Then
+            Exit Sub
+        Else
+            ' see if we can open the selected file
+            hFile = iparseGetFileHandle(sFile, True, bUnicode)
+            If hFile = -1 Then
+                DoMsgBox "Failed to open that file", mbox_DoNothing, vbOK
+            Else
+                SetFilePointer hFile, vbDefault, vbDefault, vbDefault
+                If mRtn = 200 Then  ' from an exported file
+                    ' the usercontrol already has code for importing, pass it off
+                    ReDim bData(1 To GetFileSize(hFile, vbDefault))
+                    ReadFile hFile, bData(1), UBound(bData), mRtn, ByVal vbDefault
+                    Set newList = uc_ImageControl.ImageLists.ImportImageList(bData)
+                    bSuccess = Not (newList Is Nothing)
+                Else ' pass off to more complex parsing engine
+                    Set newList = ExtractVBImageList(hFile, sFile, bUnicode)
+                    bSuccess = Not (newList Is Nothing)
+                End If
+                ' close file and reset handle
+                CloseHandle hFile
+                hFile = vbDefault
+            End If
+        End If
+    End If
+
+' clean up, success notifications if needed
+ExitRoutine:
+    If Err Then
+        If hFile Then
+            If hFile <> -1 Then CloseHandle hFile
+        End If
+        DoMsgBox Err.Description, mbox_DoNothing, vbOK
+        Err.Clear
+    ElseIf mFlags >= 200 Then ' importing else exporting
+        If bSuccess Then
+            If Not cImageListNow Is Nothing Then cImageListNow.Images.xcom_Clone cloneRelease
+            Set cImageListNow = newList  ' identify which list to show
+            newList.Images.xcom_Clone cloneCreate
+            uc_ImageControl.UpdateLists = True
+            DoMsgBox "Successfully imported imagelist", mbox_RefreshAll, vbOK ' show results (list displayed after msgbox closed)
+        Else ' oops
+            DoMsgBox "Failed to import that file. It is not in the proper format or failed permission.", mbox_DoNothing, vbOK
+        End If
+    End If
+End Sub
+
+Private Sub cmdMisc_Click()
+
+    ' checkerboard options & change key & clear imagelists
+
+    Dim hMenu As Long, hSubMenu As Long, mRtn As Long, mFlag As Long
+    Dim mRect As RECT, mPt As POINTAPI, ofn As OPENFILENAME
+    Dim bRender As Boolean, FileName As String
+    
+    ' create popup menu
+    GetCursorPos mPt
+    hMenu = CreatePopupMenu
+    If cboKey.ListCount > 1 Then mFlag = vbDefault Else mFlag = MF_DISABLED
+    AppendMenu hMenu, MF_STRING Or mFlag, 500, ByVal "Change ImageList Key"
+    AppendMenu hMenu, MF_STRING Or mFlag, 600, ByVal "Delete ALL Image Lists"
+    AppendMenu hMenu, MF_SEPARATOR, 111, ByVal vbNullString
+    If m_ChkrBoard Then mFlag = MF_CHECKED Else mFlag = vbDefault
+    AppendMenu hMenu, MF_STRING Or mFlag, 300, ByVal "Use checker board"
+    If m_BeepOk Then mFlag = MF_CHECKED Else mFlag = vbDefault
+    AppendMenu hMenu, MF_STRING Or mFlag, 50, ByVal "Message Box Beeps"
+    
+    mRtn = TrackPopupMenu(hMenu, TPM_LEFTALIGN Or TPM_NOANIMATION Or TPM_RETURNCMD Or TPM_TOPALIGN, mPt.X, mPt.Y, vbDefault, PropertyPage.hwnd, mRect)
+    DestroyMenu hMenu
+    
+    Select Case mRtn
+    Case vbDefault 'canceled
+    Case 50
+        m_BeepOk = (m_BeepOk Xor True)
+    Case 300 ' checkerboard toggle
+        m_ChkrBoard = m_ChkrBoard Xor True
+        bRender = True
+    Case 500    ' rename key
+        cmdCreateIL(vbDefault).Caption = "&Update"
+        cmdCreateIL(vbDefault).ToolTipText = "Change the Key"
+        txtILID(1).Enabled = False: txtILID(2).Enabled = False
+        txtILID(vbDefault) = cboKey.Text
+        txtILID(1) = cImageListNow.Width
+        txtILID(2) = cImageListNow.Height
+        picBase.Enabled = False
+        cmdAct(cmd_Abort).Visible = False
+        picNewList.Enabled = True
+        picNewList.Visible = True
+        picNewList.ZOrder
+        txtILID(vbDefault).SetFocus
+    Case 600
+        DoMsgBox "Are you sure you want all image lists deleted. There is no undo", mbox_DeleteAll, vbNo, vbYes
+    End Select
+    If bRender Then
+        Set cCkrBrd = Nothing
+        If cmdAct(cmd_Append).Enabled Then              ' currently browsed image displayed
+            If Not cDIB Is Nothing Then RenderSample
+        ElseIf cImageListNow Is Nothing Then            ' nothing displayed
+            RenderCheckerboard
+        ElseIf m_ItemSelected Then
+            RenderThumbNail
+        Else
+            RefreshScroll
+        End If
+    End If
+End Sub
+
+Private Sub cmdCreateIL_Click(Index As Integer)
+
+    ' Creates a new image list. Plenty of validation checks
+
+    On Error GoTo ExitRoutine
+    If Index = 1 Then   ' cancel
+        If txtILID(1).Enabled Then ' creating a new imagelist & canceling
+            If cboKey.ListCount > 1 Then cboKey.ListIndex = vbDefault
+        Else    ' changing key to imagelist and canceled
+            cmdCreateIL(vbDefault).Caption = "Create"
+            cmdCreateIL(vbDefault).ToolTipText = "Create new Image List"
+        End If
+        picBase.Enabled = True
+        cmdAct(cmd_Abort).Visible = cmdAct(cmd_Append).Enabled
+    Else
+    
+        Dim tID As Long, cX As Long, cY As Long
+        Dim newList As cImageList
+        
+        ' validate the new imagelist's key first
+        If txtILID(tID).Text = vbNullString Then
+            DoMsgBox "The key for the new image list cannot be blank.", mbox_KeyRedoList, vbOK
+            Exit Sub
+        End If
+        If uc_ImageControl.ImageLists.IsKeyAssigned(txtILID(tID).Text) > vbDefault Then
+            If txtILID(1).Enabled = False Then ' changing key, see if key is actually changed
+                If Not StrComp(txtILID(vbDefault).Text, cboKey.Text, vbTextCompare) = vbDefault Then ' different
+                    DoMsgBox "That key is not unique among the other image lists.", mbox_KeyRedoList, vbOK
+                    Exit Sub
+                End If
+            Else
+                DoMsgBox "That key is not unique among the other image lists.", mbox_KeyRedoList, vbOK
+                Exit Sub
+            End If
+        End If
+        
+        ' key is ok, what about the width/height
+        If txtILID(1).Enabled Then      ' creating new imagelist else changing key
+            For tID = 1 To 2
+                If IsNumeric(txtILID(tID).Text) Then
+                    If Val(txtILID(tID)) < 1 Then
+                        DoMsgBox "The width and height cannot be less than one pixel.", mbox_WidthRedo + tID - 1, vbOK
+                        Exit Sub
+                    End If
+                Else
+                    DoMsgBox "The width and height must be numeric and cannot be less than one pixel.", mbox_WidthRedo + tID - 1, vbOK
+                    Exit Sub
+                End If
+            Next
+            cX = Val(txtILID(1))
+            cY = Val(txtILID(2))
+            If uc_ImageControl.ImageLists.MaxImages(cX, cY) = vbDefault Then
+                DoMsgBox "This control cannot support images of that size.", mbox_DoNothing, vbOK
+                Exit Sub
+            End If
+            
+            ' key & image sizes are ok
+            Set newList = uc_ImageControl.ImageLists.Add(cX, cY, txtILID(vbDefault).Text, 1)
+            If newList Is Nothing Then
+                DoMsgBox "System resources are preventing creation of the new image list.", mbox_DoNothing, vbOK
+            Else
+                picBase.Enabled = True
+                If UBound(m_Lists) = vbDefault Then
+                    ReDim m_Lists(1 To 1)
+                Else
+                    ReDim m_Lists(1 To UBound(m_Lists) + 1)
+                End If
+                Set m_Lists(UBound(m_Lists)) = newList
+                cboKey.RemoveItem cboKey.ListCount - 1              ' remove the [New Image List] key so not included when new list sorted
+                cboKey.AddItem txtILID(vbDefault).Text                      ' add new list, sorting done by combobox
+                cboKey.ItemData(cboKey.newIndex) = ObjPtr(newList)  ' identify reference
+                Index = cboKey.newIndex                             ' cache placement
+                cboKey.AddItem "[New Image List]", cboKey.ListCount ' add [New Image List] back
+                cboKey.ListIndex = Index                            ' select new image list key
+                Changed = True
+                m_Dirty = True
+            End If
+        Else        ' changing the key
+            If StrComp(txtILID(vbDefault).Text, cboKey.Text, vbBinaryCompare) Then ' changed
+                Dim OldKey As String
+                cmdCreateIL(vbDefault).Caption = "Create"                   ' replace original caption & tooltip
+                cmdCreateIL(vbDefault).ToolTipText = "Create new Image List"
+                OldKey = cboKey.Text                                ' cache original key
+                cboKey.RemoveItem cboKey.ListIndex                  ' remove the old key
+                cboKey.RemoveItem cboKey.ListCount - 1              ' remove the [New Image List] key
+                cboKey.AddItem txtILID(vbDefault).Text                      ' add the new key, sorting done by combobox
+                cboKey.ItemData(cboKey.newIndex) = ObjPtr(cImageListNow)    ' reference imagelist
+                SendMessage cboKey.hwnd, CB_SETCURSEL, cboKey.newIndex, ByVal vbDefault    ' show new key, but don't trigger click
+                cboKey.AddItem "[New Image List]", cboKey.ListCount ' add [New Image List] back
+                uc_ImageControl.ImageLists(OldKey).Key = txtILID(vbDefault).Text ' call function to replace the key
+                uc_ImageControl.UpdateLists = True                        ' force immediate update which may refresh property page
+            End If
+            picBase.Enabled = True
+        End If
+    End If
+
+    picNewList.Visible = False  ' replace screen items
+    txtILID(vbDefault) = "Key"
+    txtILID(1) = vbNullString
+    txtILID(2) = vbNullString
+    txtILID(1).Enabled = True   ' could be disabled if changing key
+    txtILID(2).Enabled = True   ' could be disabled if changing key
+    
+ExitRoutine:
+If Err Then
+    DoMsgBox Err.Description, mbox_DoNothing, vbOK
+    Err.Clear
+End If
+End Sub
+
+Private Sub lblMaskColor_Click()
+
+    ' option to change the mask color
+    
+    On Error GoTo ExitRoutine
+    If chkUseMask.Enabled = False Then
+        DoMsgBox "Only available for non-transparent images." & vbCrLf & _
+            "Option applies to only images that have not yet been added to the image list.", mbox_KeyRedoImage, vbOK
+        Exit Sub
+    End If
+    
+    Dim hMenu As Long, mRtn As Long
+    Dim mRect As RECT, mPt As POINTAPI
+    
+    ' setup popup menu
+    GetCursorPos mPt
+    hMenu = CreatePopupMenu
+    AppendMenu hMenu, MF_STRING, 100, ByVal "Use Top Left Corner Pixel"
+    AppendMenu hMenu, MF_STRING, 200, ByVal "Use Top Right Corner Pixel"
+    AppendMenu hMenu, MF_STRING, 300, ByVal "Use Bottom Left Corner Pixel"
+    AppendMenu hMenu, MF_STRING, 400, ByVal "Use Bottom Right Corner Pixel"
+    AppendMenu hMenu, MF_SEPARATOR, 111, ByVal vbNullString
+    If chkUseMask.Value = 1 Then
+        AppendMenu hMenu, MF_STRING, 500, ByVal "Remove Mask"
+        AppendMenu hMenu, MF_SEPARATOR, 112, ByVal vbNullString
+    End If
+    AppendMenu hMenu, MF_STRING, 1000, ByVal "Show Color Dialog"
+    mRtn = TrackPopupMenu(hMenu, TPM_LEFTALIGN Or TPM_NOANIMATION Or TPM_RETURNCMD Or TPM_TOPALIGN, mPt.X, mPt.Y, vbDefault, PropertyPage.hwnd, mRect)
+    DestroyMenu hMenu
+    If mRtn = vbDefault Then Exit Sub
+    
+    Select Case mRtn
+        Case 100: mPt.X = vbDefault: mPt.Y = vbDefault
+        Case 200: mPt.X = cDIB.Width - 1: mPt.Y = vbDefault
+        Case 300: mPt.X = vbDefault: mPt.Y = cDIB.Height - 1
+        Case 400: mPt.X = cDIB.Width - 1: mPt.Y = cDIB.Height - 1
+        Case 500: ' remove mask
+            chkUseMask.Value = vbDefault
+            Exit Sub
+    End Select
+    If mRtn < 500 Then
+        If chkUseMask.Value = 1 Then cDIB.MakeTransparent lblMaskColor.ForeColor, True
+        mRtn = cDIB.GetPixel(mPt.X, mPt.Y)
+    Else        ' show color dialog
+        Dim cc As CHOOSECOLORSTRUCT, lGrays(vbDefault To 15) As Long
+        Const CC_RGBINIT         As Long = &H1
+        Const CC_FULLOPEN        As Long = &H2
+        Const CC_ANYCOLOR        As Long = &H100
+        With cc         'set the flags
+          .hInstance = App.hInstance
+          .Flags = CC_FULLOPEN Or CC_ANYCOLOR Or CC_RGBINIT
+          .lStructSize = &H24
+          .hWndOwner = PropertyPage.hwnd
+          .rgbResult = lblMaskColor.BackColor
+          For mRtn = 240 To 15 Step -15
+                lGrays((mRtn \ 15) - 1) = RGB(mRtn, mRtn, mRtn)
+          Next
+          .lpCustColors = VarPtr(lGrays(vbDefault))
+        End With
+        If CHOOSECOLOR(cc) Then ' returned a selection
+            ' our control will close; so we don't need to a lot here
+            mRtn = cc.rgbResult
+            If chkUseMask.Value = 1 Then cDIB.MakeTransparent lblMaskColor.ForeColor, True
+        Else
+            mRtn = -1
+        End If
+    End If
+    If mRtn > -1 Then
+        lblMaskColor.BackColor = mRtn
+        If chkUseMask.Value = 1 Then
+            Call chkUseMask_Click
+        Else
+            chkUseMask.Value = 1
+        End If
+    End If
+
+ExitRoutine:
+If Err Then
+    DoMsgBox Err.Description, mbox_DoNothing, vbOK
+    Err.Clear
+End If
+End Sub
+
+Private Sub lblMultiSelect_Click(Index As Integer)
+    
+    ' Multiple file selection navigation
+
+    If Index = vbDefault Then       ' previous image
+        If m_IndexMultiFile = 1 Then ' wrap if needed
+            m_IndexMultiFile = UBound(m_MultiFileList)
+        Else
+            m_IndexMultiFile = m_IndexMultiFile - 1
+        End If
+    ElseIf Index = 1 Then           ' next image & wrap if needed
+        If m_IndexMultiFile = UBound(m_MultiFileList) Then
+            m_IndexMultiFile = 1
+        Else
+            m_IndexMultiFile = m_IndexMultiFile + 1
+        End If
+    
+    ElseIf Index = 2 Then ' removing one
+    
+        Dim UB As Long
+        UB = UBound(m_MultiFileList)
+        If UB = 1 Then ' removing last one
+            Call cmdAct_Click(cmd_Abort)
+            Exit Sub
+        End If
+        
+        ' array shifting & resizing
+        m_MultiFileList(m_IndexMultiFile) = vbNullString                  ' clear file name
+        m_MultiFileKeyTag(vbDefault, m_IndexMultiFile) = vbNullString     ' clear key & tag
+        m_MultiFileKeyTag(1, m_IndexMultiFile) = vbNullString
+        If m_IndexMultiFile < UB Then
+            ' shift arrays
+            CopyMemory ByVal VarPtr(m_MultiFileList(m_IndexMultiFile)), ByVal VarPtr(m_MultiFileList(m_IndexMultiFile + 1)), (UB - m_IndexMultiFile) * 4
+            CopyMemory ByVal VarPtr(m_MultiFileList(UB)), vbDefault, 4&  ' clear file name
+            CopyMemory ByVal VarPtr(m_MultiFileKeyTag(vbDefault, m_IndexMultiFile)), ByVal VarPtr(m_MultiFileKeyTag(vbDefault, m_IndexMultiFile + 1)), (UB - m_IndexMultiFile) * 8
+            CopyMemory ByVal VarPtr(m_MultiFileKeyTag(0, UB)), 0#, 8&    ' clear key & tag
+            CopyMemory m_MultiFileMasks(m_IndexMultiFile), m_MultiFileMasks(m_IndexMultiFile + 1), (UB - m_IndexMultiFile) * 4
+        End If
+        ' resize arrays
+        ReDim Preserve m_MultiFileList(LBound(m_MultiFileList) To UB - 1)
+        ReDim Preserve m_MultiFileKeyTag(vbDefault To 1, 1 To UB - 1)
+        ReDim Preserve m_MultiFileMasks(1 To UB - 1)
+        ' move pointer back if necessary
+        If m_IndexMultiFile = UB Then m_IndexMultiFile = UB - 1
+            
+    End If
+    
+    ' show the current multi-selected file
+    Dim cX As Long, cY As Long
+    Set cDIB = New c32bppDIB
+    cX = cImageListNow.Width
+    cY = cImageListNow.Height
+    If cDIB.LoadPicture_File(m_MultiFileList(m_IndexMultiFile), cX, cY, (UBound(m_MultiFileKeyTag) = 1)) = False Then
+        Call lblMultiSelect_Click(2) ' remove it, invalid image file
+    Else
+        chkUseMask.Tag = "na"       ' set mask options for this selection
+        If cDIB.Alpha = True Then   ' no mask option for alpha images
+            chkUseMask.Enabled = False
+            chkUseMask.Value = vbDefault
+            lblMaskColor.BackColor = GetSysColor((vbButtonFace And &HFF))
+        Else                        ' enable mask options
+            chkUseMask.Enabled = True
+            If m_MultiFileMasks(m_IndexMultiFile) > -1 Then  ' image is masked
+                chkUseMask.Value = 1
+                lblMaskColor.ForeColor = m_MultiFileMasks(m_IndexMultiFile)
+                lblMaskColor.BackColor = m_MultiFileMasks(m_IndexMultiFile)
+                cDIB.MakeTransparent m_MultiFileMasks(m_IndexMultiFile)
+            Else                    ' show top left color in mask label
+                lblMaskColor.BackColor = cDIB.GetPixel(1, 1)
+                chkUseMask.Value = vbDefault
+            End If
+        End If
+        chkUseMask.Tag = vbNullString
+        
+        ' show the key & tag for this image
+        txtKeyTag(vbDefault).Text = m_MultiFileKeyTag(vbDefault, m_IndexMultiFile)
+        txtKeyTag(1).Text = m_MultiFileKeyTag(1, m_IndexMultiFile)
+        
+        If UBound(m_MultiFileList) = 1 Then ' last one; all others have been removed
+            Erase m_MultiFileKeyTag         ' don't need multi-select any longer
+            Erase m_MultiFileList
+            Erase m_MultiFileMasks
+            m_IndexMultiFile = vbDefault
+            cboIconSize.Tag = "na"
+            LoadIconSizes                  ' enable multi-resource selection if applicable
+            LoadExternalImages vbNullString ' will reset navigation & enable/disable stuff
+            cboIconSize.Tag = vbNullString
+        Else
+            LoadIconSizes                  ' show size
+            RenderSample                   ' show image
+        End If
+        cDIB.Alpha = True
+        
+    End If
+    
+End Sub
+
+Private Sub lblTxtJump_Click(Index As Integer)
+    If Index < 2 Then
+        If txtKeyTag(Index).Enabled Then txtKeyTag(Index).SetFocus
+    End If
+End Sub
+
+Private Sub picBase_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
+    If m_KeyTagDirty Then
+        ' odd. When cursor is in textbox and user clicks on picture box, we
+        ' do not get a Validate event on the textboxes.  So, we set m_KeyTagDirty
+        ' each time the textbox gets focus, then if picImages or picBase gets
+        ' a mouse down event, we call the validation events ourselves
+        Call txtKeyTag_Validate(1, False)
+        Call txtKeyTag_Validate(vbDefault, False)
+    End If
+End Sub
+
+Private Sub picBase_OLEDragDrop(Data As DataObject, Effect As Long, Button As Integer, Shift As Integer, X As Single, Y As Single)
+    
+    On Error GoTo ExitRoutine
+    
+    If cboKey.ListCount < 2 Then Exit Sub
+    
+    If cDIB Is Nothing Then Set cDIB = New c32bppDIB
+    If cDIB.GetDroppedFileNames(Data) Then
+        If Data.Files.Count = 1 Then
+            If m_IndexMultiFile Then
+                For m_IndexMultiFile = lblMultiSelect.LBound To lblMultiSelect.UBound
+                    lblMultiSelect(m_IndexMultiFile).Visible = False
+                Next
+                m_IndexMultiFile = vbDefault
+                Erase m_MultiFileList
+                Erase m_MultiFileKeyTag
+                Erase m_MultiFileMasks
+            End If
+        Else
+            ReDim m_MultiFileList(1 To Data.Files.Count)
+            ReDim m_MultiFileKeyTag(vbDefault To 1, 1 To Data.Files.Count)
+            ReDim m_MultiFileMasks(1 To Data.Files.Count)
+            For m_IndexMultiFile = 1 To Data.Files.Count
+                m_MultiFileList(m_IndexMultiFile) = Data.Files(m_IndexMultiFile)
+            Next
+            FillMemory m_MultiFileMasks(1), Data.Files.Count * 4&, 255
+            m_IndexMultiFile = 1
+        End If
+        chkUseMask.Tag = "Na": chkUseMask = vbDefault: chkUseMask.Tag = vbNullString
+        txtKeyTag(vbDefault) = vbNullString
+        txtKeyTag(1) = vbNullString
+        LoadExternalImages Data.Files(1)
+    End If
+ExitRoutine:
+If Err Then
+    DoMsgBox Err.Description, mbox_DoNothing, vbOK
+    Err.Clear
+End If
+End Sub
+
+Private Sub picImages_KeyDown(KeyCode As Integer, Shift As Integer)
+    ' allow keybaord navigation while in the scroll window
+    
+    Select Case KeyCode ' calc next item to be displayed
+        Case vbKeyRight, vbKeyDown, vbKeyPageDown
+            If m_ItemSelected = cImageListNow.Images.Count Then Exit Sub
+            m_ItemSelected = m_ItemSelected + 1
+        Case vbKeyEnd
+            If picScroll.Value < picScroll.Max Then
+                m_LastItemSelected = vbDefault
+                m_ItemSelected = cImageListNow.Images.Count
+                picScroll.Value = picScroll.Max
+                Exit Sub
+            End If
+        Case vbKeyHome
+            If picScroll.Value > picScroll.Min Then
+                m_LastItemSelected = vbDefault
+                m_ItemSelected = picScroll.Min
+                picScroll.Value = m_ItemSelected
+                Exit Sub
+            End If
+        Case vbKeyLeft, vbKeyUp, vbKeyPageUp
+            If m_ItemSelected = 1 Then Exit Sub
+            m_ItemSelected = m_ItemSelected - 1
+        Case Else
+            Exit Sub
+    End Select
+    
+    If picScroll.Value > m_ItemSelected Then
+        ' go back an entire page
+        m_LastItemSelected = vbDefault
+        If picScroll.Value - 9& < 1& Then
+            picScroll.Value = 1&
+        Else
+            picScroll.Value = picScroll.Value - 9
+        End If
+    ElseIf m_ItemSelected > picScroll.Value + 8 Then
+        ' jump an entire page
+        If picScroll.Value + 9 > picScroll.Max Then
+            picScroll.Value = picScroll.Max
+        Else
+            picScroll.Value = picScroll.Value + 9
+        End If
+    Else
+        ToggleFocusRect False
+        ToggleFocusRect True
+        m_LastItemSelected = m_ItemSelected
+        RenderThumbNail
+    End If
+    DisplayImageProps
+    
+End Sub
+
+Private Sub picImages_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
+    
+    If m_KeyTagDirty Then
+        ' odd. When cursor is in textbox and user clicks on picture box, we
+        ' do not get a Validate event on the textboxes.  So, we set m_KeyTagDirty
+        ' each time the textbox gets focus, then if picImages or picBase gets
+        ' a mouse down event, we call the validation events ourselves
+        Call txtKeyTag_Validate(1, False)  ' ensure tag is updated as needed
+        Call txtKeyTag_Validate(vbDefault, False)  ' validate key and/or update it
+        If picMsgBox.Visible Then Exit Sub  ' key was invalidated
+    End If
+    If Not Button = vbLeftButton Then Exit Sub
+    
+    Dim newIndex As Long
+    ToggleFocusRect False
+    newIndex = X \ m_ImageSize + picScroll.Value
+    If newIndex <> m_ItemSelected Then
+        If newIndex > cImageListNow.Images.Count Then
+            m_ItemSelected = cImageListNow.Images.Count
+        Else
+            m_ItemSelected = newIndex
+        End If
+    End If
+    m_LastItemSelected = m_ItemSelected
+    ToggleFocusRect True
+    RenderThumbNail
+    DisplayImageProps
+
+End Sub
+
+Private Sub picImages_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
+    If Button = vbLeftButton Then
+        If m_DragIndex Then
+            ' currently dragging, see if user dragged out of scroll area
+            Dim itmIndex As Long, rightEdge As Long, bIsValidPos As Boolean
+            If Y > -1 And Y < picImages.ScaleHeight Then    ' within area vertically
+                If cImageListNow.Images.Count > 9 Then             ' calculate horizontal bounds
+                    rightEdge = picImages.ScaleWidth
+                Else
+                    rightEdge = cImageListNow.Images.Count * m_ImageSize
+                End If
+                If X > -1 And X < rightEdge Then            ' within area horizontally
+                    bIsValidPos = True
+                    itmIndex = X \ m_ImageSize                       ' calc which thumbnail
+                    If X > (itmIndex * m_ImageSize + 15) Then        ' is more on left side
+                        itmIndex = itmIndex + 2             ' or right side of thumbnail?
+                    Else
+                        itmIndex = itmIndex + 1
+                    End If
+                    
+                    If itmIndex <> m_DragIndex Then         ' position changed?
+                        If cImageListNow.Images.Count > 9 Then
+                            tmrDragging.Enabled = False     ' see if timer needs to be started
+                            If itmIndex = 1 Then            ' left edge for autoscroll?
+                                If picScroll.Value > 1 Then tmrDragging.Enabled = True
+                            ElseIf itmIndex = 10 Then       ' right edge?
+                                If picScroll.Value < picScroll.Max Then tmrDragging.Enabled = True
+                            End If
+                        End If
+                        m_DragIndex = itmIndex              ' set new index
+                        Call DoDragHighlight                ' call routine to display position
+                    End If
+                End If
+            End If
+            If Not bIsValidPos Then
+                tmrDragging.Enabled = False
+                InvertRect picImages.hDC, rInverse
+                InvalidateRect picImages.hwnd, rInverse, vbDefault
+                rInverse.Right = vbDefault: rInverse.Left = vbDefault
+                m_DragIndex = -1
+            End If
+        ElseIf m_DragStart = vbDefault Then
+            m_DragStart = X
+        Else
+            If Abs(m_DragStart - X) > 3 Then m_DragIndex = -1
+        End If
+    End If
+End Sub
+
+Private Sub picImages_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
+    
+    If m_DragIndex Then
+        m_DragStart = vbDefault
+        If m_DragIndex = -1 Then
+            m_DragIndex = vbDefault
+        Else
+            tmrDragging.Enabled = False
+            InvertRect picImages.hDC, rInverse
+            InvalidateRect picImages.hwnd, rInverse, vbDefault
+            rInverse.Left = vbDefault: rInverse.Right = vbDefault
+            m_DragStart = vbDefault
+            If X > -1 And X < picImages.ScaleWidth Then
+                If Y > -1 And Y < picImages.ScaleHeight Then
+                    m_DragIndex = m_DragIndex + picScroll.Value - 2
+                    If m_DragIndex < m_ItemSelected Then m_DragIndex = m_DragIndex + 1
+                    If m_ItemSelected <> m_DragIndex Then
+                        cImageListNow.Images(m_ItemSelected).Index = m_DragIndex
+                        m_ItemSelected = m_DragIndex
+                        RefreshScroll
+                        Changed = True
+                        m_Dirty = True
+                    End If
+                End If
+            End If
+            m_DragIndex = vbDefault
+        End If
+    End If
+End Sub
+
+Private Sub picImages_OLEDragDrop(Data As DataObject, Effect As Long, Button As Integer, Shift As Integer, X As Single, Y As Single)
+    Call picBase_OLEDragDrop(Data, Effect, Button, Shift, X, Y)
+End Sub
+
+Private Sub ToggleFocusRect(bShow As Boolean)
+
+    Dim pRect As RECT
+    If bShow Then
+        pRect.Left = (m_ItemSelected - picScroll.Value) * m_ImageSize            ' draw new focus rect
+        pRect.Right = pRect.Left + m_ImageSize
+        pRect.Bottom = m_ImageSize
+        DrawFocusRect picImages.hDC, pRect
+        InvalidateRect picImages.hwnd, pRect, vbDefault
+    Else
+    
+        If Not m_LastItemSelected = vbDefault Then                 ' erase previous focus rect
+            pRect.Left = m_ImageSize * (m_LastItemSelected - picScroll.Value)
+            pRect.Right = pRect.Left + m_ImageSize
+            pRect.Bottom = m_ImageSize
+            DrawFocusRect picImages.hDC, pRect
+            InvalidateRect picImages.hwnd, pRect, vbDefault
+        End If
+
+    End If
+End Sub
+
+Private Sub DisplayImageProps()
+
+    If Not cDIB Is Nothing Then Exit Sub
+    On Error GoTo ExitRoutine
+    If cImageListNow Is Nothing Then
+        txtKeyTag(vbDefault) = vbNullString
+        txtKeyTag(1) = vbNullString
+    ElseIf m_ItemSelected Then
+        With cImageListNow
+            txtKeyTag(vbDefault) = .Images(m_ItemSelected).Key
+            txtKeyTag(1) = .Images(m_ItemSelected).Tag
+            lblIndex.Caption = "Image Index: " & m_ItemSelected & " of " & .Images.Count & " {Maximum: ~" & uc_ImageControl.ImageLists.MaxImages(.Width, .Height) & "}"
+            If cboIconSize.Enabled Then
+                cboIconSize.Enabled = False
+                cboIconSize.Clear
+            End If
+        End With
+    End If
+ExitRoutine:
+If Err Then
+    DoMsgBox Err.Description, mbox_DoNothing, vbOK
+    Err.Clear
+End If
+End Sub
+
+Private Sub picScroll_Change()
+
+    If cImageListNow Is Nothing Then Exit Sub
+    
+    Dim nrChanged As Long
+    nrChanged = picScroll.Value - Val(picScroll.Tag)
+    If Abs(nrChanged) = 1 Then
+        If nrChanged = -1 Then   ' sliding scroll right
+            ' slide existing display right one slot, erase the last slot & render to last slot
+            BitBlt picImages.hDC, m_ImageSize, vbDefault, (picImages.ScaleWidth - m_ImageSize), m_ImageSize, picImages.hDC, vbDefault, vbDefault, vbSrcCopy
+            picImages.Line (vbDefault, vbDefault)-(m_ImageSize - 1&, m_ImageSize), picImages.BackColor, BF
+            cImageListNow.Images.RenderRange picScroll.Value, picScroll.Value, picImages.hDC, vbDefault, vbDefault, m_ImageSize, m_ImageSize
+        Else                        ' sliding scroll left
+            ' slide existing display left one slot, erase last slot & render to that slot
+            BitBlt picImages.hDC, vbDefault, vbDefault, (picImages.ScaleWidth - m_ImageSize), m_ImageSize, picImages.hDC, m_ImageSize, vbDefault, vbSrcCopy
+            picImages.Line (picImages.ScaleWidth - m_ImageSize, vbDefault)-(picImages.ScaleWidth - 1&, m_ImageSize), picImages.BackColor, BF
+            cImageListNow.Images.RenderRange picScroll.Value + 8, picScroll.Value + 8, picImages.hDC, picImages.ScaleWidth - m_ImageSize, vbDefault, m_ImageSize, m_ImageSize
+        End If
+        ' show the focus rectangle if selected item was scrolled out of area and now is in the area
+        If m_ItemSelected < Val(picScroll.Tag) Or m_ItemSelected > Val(picScroll.Tag) + 8 Then ToggleFocusRect True
+    Else
+        RefreshScroll
+    End If
+    picScroll.Tag = picScroll.Value
+
+End Sub
+
+Private Sub picScroll_Scroll()
+    Call picScroll_Change
+End Sub
+
+Private Sub PropertyPage_ApplyChanges()
+    
+    On Error GoTo ExitRoutine
+    If Not cImageListNow Is Nothing Then
+        If m_KeyTagDirty Then
+            ' odd. When cursor is in textbox and user clicks on picture box, we
+            ' do not get a Validate event on the textboxes.  So, we set m_KeyTagDirty
+            ' each time the textbox gets focus, then if picImages or picBase gets
+            ' a mouse down event, we call the validation events ourselves
+            Call txtKeyTag_Validate(1, False)
+            Call txtKeyTag_Validate(vbDefault, False)
+        End If
+        cImageListNow.Images.xcom_Clone cloneRelease
+        cImageListNow.Images.xcom_Clone cloneCreate
+        uc_ImageControl.UpdateLists = True ' force usercontrol to register changes
+    End If
+
+ExitRoutine:
+Changed = False
+m_Dirty = False
+If Err Then Err.Clear
+End Sub
+
+Private Sub PropertyPage_Initialize()
+
+    Call InitCommonControls
+    
+    Dim lStyle As Long, lStyleEx As Long
+    Const GWL_EXSTYLE As Long = -20
+    Const GWL_STYLE As Long = -16
+    Const WS_EX_CLIENTEDGE As Long = &H200&
+    Const WS_THICKFRAME As Long = &H40000
+        
+    ' See DoMsgBox. We are making a picture box appear raised vs sunken
+    lStyle = GetWindowLong(picMsgBox.hwnd, GWL_STYLE)
+    lStyleEx = GetWindowLong(picMsgBox.hwnd, GWL_EXSTYLE)
+    SetWindowLong picMsgBox.hwnd, GWL_STYLE, lStyle Or WS_THICKFRAME
+    SetWindowLong picMsgBox.hwnd, GWL_EXSTYLE, lStyleEx And Not WS_EX_CLIENTEDGE
+    SetWindowPos picMsgBox.hwnd, vbDefault, vbDefault, vbDefault, vbDefault, vbDefault, 55
+    
+    With shpSample
+        rDisplay.Left = ScaleX(.Left, ScaleMode, vbPixels)
+        rDisplay.Right = ScaleX(.Width, ScaleMode, vbPixels) + rDisplay.Left
+        rDisplay.Top = ScaleY(.Top, ScaleMode, vbPixels)
+        rDisplay.Bottom = ScaleY(.Height, ScaleMode, vbPixels) + rDisplay.Top
+    End With
+    picImages.AutoRedraw = True
+    picImages.ScaleMode = vbPixels
+    picBase.AutoRedraw = True
+    picBase.ScaleMode = vbPixels
+    lblMaskColor.BackColor = GetSysColor((vbButtonFace And &HFF))
+    m_BeepOk = True
+    tmrDragging.Interval = 100 ' 10 images per second autoscroll
+    
+End Sub
+
+Private Sub PropertyPage_Paint()
+    If ActiveControl Is picNewList Then txtILID(vbDefault).SetFocus
+End Sub
+
+Private Sub PropertyPage_SelectionChanged()
+    
+    ' this can be called a variety of ways
+    ' 1) User clicks on another imagelist control
+    ' 2) Usercontrol property value changed via code or changing on property sheet
+    ' 3) VB refreshing for other reasons
+    
+    On Error GoTo ExitRoutine
+    
+    ' let's determine if this propertypage was recreated (new hWnd, new controls)
+    If Not uc_ImageControl Is Nothing Then  ' else new instance
+        ' see if the user clicked on a different control
+        If ObjPtr(uc_ImageControl) = ObjPtr(SelectedControls(vbDefault)) Then
+            Changed = m_Dirty
+            Exit Sub
+        End If
+        ' show message box if change
+        If Changed Then
+            DoMsgBox "Image List has changed. Save Changes?", mbox_UpdateAbort, vbYes, vbNo
+        ElseIf Not cImageListNow Is Nothing Then
+            cImageListNow.Images.xcom_Clone cloneRelease
+        End If
+    End If
+    
+    ' clear our screen
+    ResetScreen
+        
+        
+ExitRoutine:
+If Err Then
+    DoMsgBox Err.Description, mbox_DoNothing, vbOK
+    Err.Clear
+End If
+End Sub
+
+Private Sub BuildKeyList()
+
+    Dim iView As Long, Index As Long
+    
+    With uc_ImageControl.ImageLists
+        If .Count Then
+            ReDim m_Lists(1 To .Count)
+            For Index = 1 To .Count
+                Set m_Lists(Index) = .Item(Index)
+            Next
+        Else
+            ReDim m_Lists(0 To 0)
+        End If
+    End With
+    
+    cboKey.Clear
+    iView = cboKey.ListIndex
+    For Index = 1 To UBound(m_Lists)
+        cboKey.AddItem uc_ImageControl.ImageLists(Index).Key
+        cboKey.ItemData(cboKey.newIndex) = ObjPtr(m_Lists(Index))
+        If m_Lists(Index).Images.xcom_IsCloned Then
+            m_Lists(Index).Images.xcom_Clone cloneRelease
+            If iView = cboKey.ListIndex Then iView = cboKey.newIndex
+        End If
+    Next
+    cboKey.AddItem "[New Image List]", cboKey.ListCount
+    If iView = -1 Then iView = vbDefault
+    Set cImageListNow = Nothing
+    cboKey.ListIndex = iView
+
+End Sub
+
+Private Sub RefreshScroll()
+    
+    On Error GoTo ExitRoutine
+    
+    If cImageListNow Is Nothing Then Exit Sub
+    
+    Dim Index As Long
+    ' redraw scroll area
+    picImages.Cls
+    cImageListNow.Images.RenderRange picScroll.Value, picScroll.Value + 8, picImages.hDC, vbDefault, vbDefault, m_ImageSize, m_ImageSize
+    picImages.Refresh
+    
+    ' determine if we need to do a focus rectangle
+    If m_ItemSelected = vbDefault Then m_ItemSelected = 1&
+    
+    If m_ItemSelected >= picScroll.Value Then
+        If m_ItemSelected < picScroll.Value + 9 Then ToggleFocusRect True
+    End If
+    
+    If m_LastItemSelected = vbDefault Then
+        RenderThumbNail
+        DisplayImageProps
+    End If
+    m_LastItemSelected = m_ItemSelected
+
+ExitRoutine:
+If Err Then
+    DoMsgBox Err.Description, mbox_DoNothing, vbOK
+    Err.Clear
+End If
+End Sub
+
+Private Sub PropertyPage_Terminate()
+    On Error Resume Next
+    If Not cImageListNow Is Nothing Then
+        If m_Dirty Then
+            cImageListNow.Images.xcom_Clone cloneRestore
+        Else
+            cImageListNow.Images.xcom_Clone cloneRelease
+        End If
+    End If
+End Sub
+
+Private Sub DoDragHighlight()
+
+    InvertRect picImages.hDC, rInverse
+    InvalidateRect picImages.hwnd, rInverse, vbDefault
+    If m_DragIndex = 1 Then
+        If picScroll.Value > 1 Then
+            picScroll.Value = picScroll.Value - 1
+        Else
+            tmrDragging.Enabled = False
+        End If
+        rInverse.Left = vbDefault
+        rInverse.Right = 8
+    ElseIf m_DragIndex = 10 Then
+        If cImageListNow.Images.Count > 9 Then
+            If picScroll.Value < picScroll.Max Then
+                picScroll.Value = picScroll.Value + 1
+            Else
+                tmrDragging.Enabled = False
+            End If
+        Else
+            tmrDragging.Enabled = False
+        End If
+        rInverse.Right = picImages.ScaleWidth
+        rInverse.Left = rInverse.Right - 8
+    Else
+        rInverse.Right = m_DragIndex * m_ImageSize - 24
+        rInverse.Left = rInverse.Right - 16
+    End If
+        
+    rInverse.Bottom = m_ImageSize
+    InvertRect picImages.hDC, rInverse
+    InvalidateRect picImages.hwnd, rInverse, vbDefault
+    
+End Sub
+
+Private Sub tmrDragging_Timer()
+    Call DoDragHighlight
+End Sub
+
+Private Sub txtILID_GotFocus(Index As Integer)
+    With txtILID(Index)
+        .SelStart = vbDefault
+        .SelLength = Len(.Text)
+    End With
+End Sub
+Private Sub txtKeyTag_GotFocus(Index As Integer)
+    With txtKeyTag(Index)
+        .SelStart = vbDefault
+        .SelLength = Len(.Text)
+    End With
+    If cDIB Is Nothing Then m_KeyTagDirty = True
+End Sub
+
+Private Sub txtKeyTag_Validate(Index As Integer, Cancel As Boolean)
+
+    If picMsgBox.Visible = True Then Exit Sub
+    
+    m_KeyTagDirty = False
+    Dim kIndex As Long, tKey As String
+    If cDIB Is Nothing Then
+        If cImageListNow Is Nothing Or m_ItemSelected = vbDefault Then
+            txtKeyTag(Index) = vbNullString
+        Else
+            If Index = vbDefault Then ' validate key
+                tKey = cImageListNow.Images(m_ItemSelected).Key
+                If txtKeyTag(Index) = vbNullString Then
+                    If tKey = vbNullString Then Exit Sub
+                End If
+                kIndex = cImageListNow.Images.IsKeyAssigned(txtKeyTag(Index).Text)
+                If kIndex = vbDefault Then ' new key
+                    cImageListNow.Images(m_ItemSelected).Key = txtKeyTag(vbDefault).Text
+                    Changed = True
+                    m_KeyTagDirty = False
+                ElseIf kIndex = m_ItemSelected Then
+                    If StrComp(txtKeyTag(Index).Text, tKey, vbBinaryCompare) Then
+                        cImageListNow.Images(m_ItemSelected).Key = txtKeyTag(vbDefault).Text
+                        Changed = True
+                    End If
+                Else
+                    txtKeyTag(Index).SetFocus
+                    DoMsgBox "The key for Image #" & m_ItemSelected & " must unique among other images in this image list.", mbox_KeyRedoImage, vbOK
+                End If
+            ElseIf StrComp(txtKeyTag(Index).Text, cImageListNow.Images(m_ItemSelected).Tag, vbBinaryCompare) Then
+                cImageListNow.Images(m_ItemSelected).Tag = txtKeyTag(Index).Text
+                Changed = True
+            End If
+            m_Dirty = Changed
+        End If
+    Else
+        If Index = vbDefault Then
+            If txtKeyTag(Index).Text = vbNullString Then
+                If m_IndexMultiFile Then m_MultiFileKeyTag(vbDefault, m_IndexMultiFile) = txtKeyTag(Index).Text
+            Else
+                If m_IndexMultiFile Then
+                    For kIndex = 1 To UBound(m_MultiFileList)
+                        If kIndex <> m_IndexMultiFile Then
+                            If StrComp(m_MultiFileKeyTag(vbDefault, kIndex), txtKeyTag(Index).Text, vbTextCompare) = vbDefault Then
+                                DoMsgBox "Key duplicates a key in one of the other multiple images you chose", mbox_KeyRedoImage, vbOK
+                                txtKeyTag(Index) = vbNullString
+                                Exit For
+                            End If
+                        End If
+                    Next
+                    m_MultiFileKeyTag(vbDefault, m_IndexMultiFile) = txtKeyTag(Index).Text
+                End If
+                If Not txtKeyTag(Index).Text = vbNullString Then
+                    kIndex = cImageListNow.Images.IsKeyAssigned(txtKeyTag(Index).Text)
+                    If kIndex > vbDefault Then
+                        DoMsgBox "Key duplicates another image key within the image list.", mbox_KeyRedoImage, vbOK
+                        txtKeyTag(Index).Text = vbNullString
+                    End If
+                End If
+            End If
+        ElseIf m_IndexMultiFile Then
+            m_MultiFileKeyTag(1, m_IndexMultiFile) = txtKeyTag(Index)
+        End If
+    End If
+
+End Sub
+
+Private Function GetFileName(fileNameStructure As OPENFILENAME, bOpen As Boolean) As String
+    
+    ' using API version vs commondialog enables Unicode filenames to be passed to c32bppDIB classes
+    
+    Dim rtn As Long
+    Dim bUnicode As Boolean
+    Const FNERR_BUFFERTOOSMALL As Long = &H3003
+    
+    With fileNameStructure
+        .lStructSize = Len(fileNameStructure)
+        .hWndOwner = PropertyPage.hwnd
+        .hInstance = App.hInstance
+        .nMaxFile = Len(.lpstrFile)
+        .nMaxFileTitle = Len(.lpstrFileTitle)
+        
+        bUnicode = Not (IsWindowUnicode(GetDesktopWindow) = vbDefault)
+        If bUnicode Then
+            .lpstrInitialDir = StrConv(.lpstrInitialDir, vbUnicode)
+            .lpstrFile = StrConv(.lpstrFile, vbUnicode)
+            .lpstrFilter = StrConv(.lpstrFilter, vbUnicode)
+            .lpstrTitle = StrConv(.lpstrTitle, vbUnicode)
+        End If
+        .lpstrFileTitle = .lpstrFile
+    End With
+    
+    If bUnicode Then
+        If bOpen Then
+            rtn = GetOpenFileNameW(fileNameStructure)
+            If rtn = vbDefault Then
+                If CommDlgExtendedError() = FNERR_BUFFERTOOSMALL Then Err.Raise "1985", "ImageList", "Too many files were selected"
+            End If
+        Else
+            rtn = GetSaveFileNameW(fileNameStructure)
+        End If
+        If rtn > vbDefault Then
+            If bUnicode Then
+                'rtn = lstrlenW(ByVal fileNameStructure.lpstrFile)
+                fileNameStructure.lpstrFile = StrConv(fileNameStructure.lpstrFile, vbFromUnicode)
+            End If
+        End If
+    Else
+        If bOpen Then
+            rtn = GetOpenFileName(fileNameStructure)
+            If rtn = vbDefault Then
+                If CommDlgExtendedError() = FNERR_BUFFERTOOSMALL Then Err.Raise "1985", "ImageList", "Too many files were selected"
+            End If
+        Else
+            rtn = GetSaveFileNameA(fileNameStructure)
+        End If
+    End If
+    If rtn Then
+        rtn = InStr(fileNameStructure.lpstrFile, vbNullChar & vbNullChar)
+        If (fileNameStructure.Flags And OFN_ALLOWMULTISELECT) = OFN_ALLOWMULTISELECT Then
+            m_MultiFileList = Split(Left$(fileNameStructure.lpstrFile, rtn - 1), vbNullChar)
+            If UBound(m_MultiFileList) = vbDefault Then
+                GetFileName = m_MultiFileList(vbDefault)
+                Erase m_MultiFileList
+                m_IndexMultiFile = vbDefault
+            Else
+                If Right$(m_MultiFileList(vbDefault), 1) <> "\" Then m_MultiFileList(vbDefault) = m_MultiFileList(vbDefault) & "\"
+                For rtn = 1 To UBound(m_MultiFileList)
+                    m_MultiFileList(rtn) = m_MultiFileList(vbDefault) & m_MultiFileList(rtn)
+                Next
+                ReDim m_MultiFileMasks(1 To rtn - 1)
+                ReDim m_MultiFileKeyTag(vbDefault To 1, 1 To rtn - 1)
+                FillMemory m_MultiFileMasks(1), (rtn - 1) * 4&, 255
+                GetFileName = m_MultiFileList(1)
+                m_IndexMultiFile = 1
+            End If
+        Else
+            GetFileName = fileNameStructure.lpstrFile
+        End If
+    End If
+
+End Function
+
+Private Sub LoadIconSizes()
+
+    Dim icoSizes() As Long
+    Dim X As Long, i As Long
+    Dim sItem As String, sOrder As Long
+    Dim bShowMultiResource As Boolean
+    
+    cboIconSize.Clear
+    
+    If m_IndexMultiFile = vbDefault Then
+        bShowMultiResource = (cDIB.SourceIconSizes(icoSizes) > vbDefault)
+    End If
+    If bShowMultiResource = False Then
+        sItem = cDIB.Width & "x" & cDIB.Height & ": "
+        Select Case cDIB.ImageType
+            Case imgBitmap: sItem = sItem & "Bmp JPG"
+            Case imgBmpARGB, imgBmpPARGB: sItem = sItem & "Alpha Bmp"
+            Case imgEMF, imgWMF: sItem = sItem & "WMF"
+            Case imgGIF: sItem = sItem & "GIF"
+            Case imgPNG, imgPNGicon: sItem = sItem & "PNG"
+            Case imgIcon: sItem = sItem & "Windows Icon"
+            Case imgCursor: sItem = sItem & "Windows Cursor"
+            Case imgIconARGB: sItem = sItem & "WinXP+ Icon"
+            Case imgCursorARGB: sItem = sItem & "WinXP+ Cursor"
+            Case Else
+        End Select
+        cboIconSize.AddItem sItem
+        cboIconSize.Enabled = False
+    Else
+        For X = vbDefault To UBound(icoSizes, 2)
+            sItem = Format(icoSizes(vbDefault, X), "000") & "x" & Format(icoSizes(1, X), "000")
+            sItem = sItem & " {" & icoSizes(2, X) & "bpp, "
+            Select Case icoSizes(3, X)
+                Case lvil_TRUE_COLOR
+                    sItem = sItem & "TrueColor}"
+                Case lvil_HIGH_COLOR
+                    sItem = sItem & "HighColor}"
+                Case lvil_TRUE_COLOR_ALPHA
+                    sItem = sItem & "Alpha}"
+                Case Else
+                    sItem = sItem & icoSizes(3, X) & " colors}"
+            End Select
+            sOrder = icoSizes(vbDefault, X) * icoSizes(1, X) + icoSizes(2, X)
+            For i = vbDefault To cboIconSize.ListCount - 1
+                If sOrder < cboIconSize.ItemData(i) Then Exit For
+            Next
+            cboIconSize.AddItem sItem, i
+            cboIconSize.ItemData(i) = sOrder
+        Next
+    End If
+    cboIconSize.Enabled = (cboIconSize.ListCount > 1)
+    If cboIconSize.ListCount > vbDefault Then cboIconSize.ListIndex = cboIconSize.ListCount - 1
+End Sub
+
+Private Sub DoBrowseWindow()
+
+    Dim sFilename As String
+    Dim ofn As OPENFILENAME
+    
+    If cImageListNow Is Nothing Then
+        Set cDIB = New c32bppDIB
+    Else
+        Set cDIB = cImageListNow.Images.xcom_ImagesDIB
+    End If
+    With ofn
+        .lpstrFilter = "Image Files" & vbNullChar & "*gif;*.bmp;*.jpg;*.jpeg;*.ico;*.cur;*.wmf;*.emf;*.png"
+        If cDIB.isGDIplusEnabled = True Then
+            .lpstrFilter = .lpstrFilter & ";*.tiff;*.tif"
+        End If
+        .lpstrFilter = .lpstrFilter & vbNullChar & "Bitmaps" & vbNullChar & "*.bmp" & vbNullChar & "GIFs" & vbNullChar & "*.gif" & vbNullChar & "Icons and Cursors" & vbNullChar & "*.ico;*.cur" & vbNullChar & "JPGs" & vbNullChar & "*.jpg;*.jpeg" & vbNullChar & "Meta Files" & vbNullChar & "*.wmf;*.emf" & vbNullChar & "PNGs" & vbNullChar & "*.png" & vbNullChar
+        If cDIB.isGDIplusEnabled = True Then
+            .lpstrFilter = .lpstrFilter & "Tiff" & vbNullChar & "*.tiff;*.tif" & vbNullChar
+        End If
+        .lpstrFilter = ofn.lpstrFilter & "All Files" & vbNullChar & "*.*" & vbNullChar
+        .lpstrDefExt = vbNullString
+        .lpstrFile = String$(2562, vbDefault) ' large string; 2562 is NT4's max value; other O/S can go larger
+        .lpstrTitle = "Select Image"
+        .lpstrInitialDir = vbNullString
+        .Flags = OFN_LONGNAMES Or OFN_EXPLORER Or OFN_ENABLESIZING Or OFN_DONTADDTORECENT _
+                Or OFN_FILEMUSTEXIST Or OFN_ALLOWMULTISELECT
+    End With
+    
+    Set cDIB = Nothing
+    sFilename = GetFileName(ofn, True)
+    Refresh
+    If Not sFilename = vbNullString Then
+        Set cDIB = New c32bppDIB
+        chkUseMask.Tag = "Na": chkUseMask = vbDefault: chkUseMask.Tag = vbNullString
+        txtKeyTag(vbDefault) = vbNullString
+        txtKeyTag(1) = vbNullString
+        LoadExternalImages sFilename
+    End If
+    
+End Sub
+
+Private Sub DoInsertImage()
+
+    On Error GoTo ExitRoutine
+    Dim bSuccess As Boolean
+    Dim insertPos As Long
+    
+    cmdAct(cmd_Append).Enabled = False
+    cmdAct(cmd_Abort).Visible = False
+    
+    insertPos = m_ItemSelected + 1
+    
+    If Not m_IndexMultiFile = vbDefault Then
+        Dim cX As Long, cY As Long, nrImages As Long
+        cX = cImageListNow.Width
+        cY = cImageListNow.Height
+        
+        lblMultiSelect(vbDefault).Visible = False
+        lblMultiSelect(1).Visible = False
+        lblMultiSelect(2).Visible = False
+        
+        nrImages = UBound(m_MultiFileList)
+        cImageListNow.Images.xcom_AddItem_FromDIB cDIB, insertPos, vbNullString, vbNullString, True, nrImages
+        For m_IndexMultiFile = 1 To nrImages
+            lblIndex.Caption = "Appending " & m_IndexMultiFile & " of " & nrImages
+            lblIndex.Refresh
+            If cDIB.LoadPicture_File(m_MultiFileList(m_IndexMultiFile), cX, cY, False) Then
+                If m_MultiFileMasks(m_IndexMultiFile) > -1 Then cDIB.MakeTransparent m_MultiFileMasks(m_IndexMultiFile)
+                If cImageListNow.Images.xcom_AddItem_FromDIB(cDIB, insertPos, m_MultiFileKeyTag(vbDefault, m_IndexMultiFile), m_MultiFileKeyTag(1, m_IndexMultiFile), (chkScale = 1), vbDefault) Is Nothing Then Exit For
+                insertPos = insertPos + 1
+            End If
+        Next
+        If insertPos - (m_ItemSelected + nrImages + 1) Then ' didn't load all files
+            cX = m_ItemSelected + nrImages - insertPos + 1
+            insertPos = insertPos + cX - 1
+            Call cImageListNow.Images.xcom_AddItem_FromDIB(cDIB, insertPos, vbNullString, vbNullString, True, -cX)
+        End If
+        bSuccess = (m_IndexMultiFile > UBound(m_MultiFileList))
+        Erase m_MultiFileList
+        Erase m_MultiFileKeyTag
+    Else
+        bSuccess = Not (cImageListNow.Images.xcom_AddItem_FromDIB(cDIB, insertPos, txtKeyTag(vbDefault).Text, txtKeyTag(1).Text, (chkScale = 1), 1&) Is Nothing)
+    End If
+    Set cDIB = Nothing
+    If bSuccess Then
+        ' we will show this image immediately in the scroll area
+        picImages.Enabled = True
+        m_ItemSelected = m_ItemSelected + 1
+        m_LastItemSelected = vbDefault
+        If cImageListNow.Images.Count > 9 Then             ' scroll needed
+            picScroll.Max = cImageListNow.Images.Count - 8 ' set max scroll value & change the value
+            If picScroll.Visible = False Then picScroll.Visible = True
+            picScroll.Value = picScroll.Max         ' this will refresh & display new image
+        Else
+            RefreshScroll
+        End If
+        cmdAct(cmd_DelImage).Enabled = True
+        Changed = True
+        m_Dirty = True
+    ElseIf m_IndexMultiFile = vbDefault Then
+        DoMsgBox "Failed to append the image.", mbox_DoNothing, vbOK
+    Else
+        DoMsgBox "Failed to append all of the selected image(s).", mbox_DoNothing, vbOK
+    End If
+    
+ExitRoutine:
+    picImages.SetFocus
+    m_IndexMultiFile = vbDefault
+    If Err Then
+        Set cDIB = Nothing
+        DoMsgBox Err.Description, mbox_DoNothing, vbOK
+        Err.Clear
+    End If
+End Sub
+
+Private Sub DoDeleteImage()
+    
+    On Error GoTo ExitRoutine
+    If cImageListNow.Images.Count > vbDefault Then ' do we have images to delete
+        If m_ItemSelected > vbDefault Then      ' is one selected; always should be
+            ' ok remove the image
+            Call cImageListNow.Images.Remove(m_ItemSelected)
+            ' choose which item to show selected. If last image removed, make last to be selected
+            If cImageListNow.Images.Count = vbDefault Then
+                picImages.Cls
+                picBase.Cls
+                picImages.Enabled = False
+                cmdAct(cmd_DelImage).Enabled = False
+                picImages.Enabled = False
+                lblIndex.Caption = vbNullString
+                m_ItemSelected = vbDefault: m_LastItemSelected = vbDefault
+            Else
+                If m_ItemSelected > cImageListNow.Images.Count Then m_ItemSelected = cImageListNow.Images.Count
+                If picScroll.Visible = True Then        ' do we hide scrollbar?
+                    If cImageListNow.Images.Count < 10 Then    ' yep
+                        picScroll.Max = 1
+                        picScroll.Visible = False
+                    Else                                ' nope, but adjust max value
+                        picScroll.Max = cImageListNow.Images.Count - 8
+                        m_LastItemSelected = vbDefault
+                        RefreshScroll
+                    End If
+                Else
+                    m_LastItemSelected = vbDefault
+                    RefreshScroll
+                End If
+            End If
+            Changed = True
+            m_Dirty = True
+        End If
+    End If
+
+ExitRoutine:
+If Err Then
+    DoMsgBox Err.Description, mbox_DoNothing, vbOK
+    Err.Clear
+End If
+End Sub
+
+Private Sub ResetScreen()
+
+    Dim Index As Long
+    tmrDragging.Enabled = False
+    m_DragIndex = vbDefault
+    m_DragStart = vbDefault
+    m_KeyTagDirty = False
+    Set uc_ImageControl = SelectedControls(vbDefault)
+    For Index = lblMultiSelect.LBound To lblMultiSelect.UBound
+        lblMultiSelect(Index).Visible = False
+    Next
+    For Index = txtKeyTag.LBound To txtKeyTag.UBound
+        txtKeyTag(Index).Text = vbNullString
+    Next
+    cmdAct(cmd_Abort).Visible = False
+    cmdAct(cmd_Append).Enabled = False
+    cmdAct(cmd_DelImage).Enabled = False
+    cmdAct(cmd_DelList).Enabled = (cboKey.ListCount > 1)
+    picMsgBox.Visible = False
+    picNewList.Visible = False
+    lblIndex.Caption = vbNullString
+    lblSize.Caption = vbNullString
+    picBase.Cls
+    picBase.Enabled = False
+    picScroll.Visible = False
+    If m_IndexMultiFile Then
+        Erase m_MultiFileList()
+        Erase m_MultiFileKeyTag()
+        Erase m_MultiFileMasks()
+        m_IndexMultiFile = vbDefault
+    End If
+    Set cDIB = Nothing
+    m_ItemSelected = vbDefault: m_LastItemSelected = vbDefault
+    m_DragIndex = vbDefault: m_DragStart = vbDefault
+    chkDelay.Tag = "na": chkDelay.Value = 1: chkDelay.Tag = vbNullString
+    chkUseMask.Tag = "na": chkUseMask.Value = vbDefault: chkUseMask.Tag = vbNullString
+    chkScale.Value = 1
+    BuildKeyList
+    Changed = False
+    m_Dirty = False
+
+End Sub
+
+Private Sub RenderSample()
+
+    Dim destCx As Long, destCy As Long  ' scaled destination image size
+    Dim srcCx As Long, srcCy As Long    ' original image size
+    Dim dcCX As Long, dcCY As Long      ' canvas size to draw on
+    
+    
+    On Error Resume Next
+    If cboIconSize.Enabled = True Then  ' multiple icon formats exist
+        ' determine original size to display
+        srcCx = Val(cboIconSize.Text)
+        srcCy = Val(Mid$(cboIconSize.Text, InStr(cboIconSize.Text, "x") + 1))
+        ' have class reload image and specifiy the size/depth required
+        cDIB.LoadPicture_FromOrignalFormat srcCx, srcCy, Val(Mid$(cboIconSize.Text, InStr(cboIconSize.Text, "{") + 1, 3))
+    End If
+    
+    ' determine size of our canvas
+    dcCX = rDisplay.Right - rDisplay.Left + 1
+    dcCY = rDisplay.Bottom - rDisplay.Top + 1
+    ' scale source image to our canvas, scaling down if needed but don't stretch larger than original size
+    cDIB.ScaleImage dcCX - 20, dcCY - 20, destCx, destCy, scaleDownAsNeeded
+    
+    RenderCheckerboard
+    ' render the image using center of canvas as anchor
+    cDIB.Render picBase.hDC, rDisplay.Left + dcCX \ 2, rDisplay.Top + dcCY \ 2, destCx, destCy, , , , , , , , , , , , True
+    InvalidateRect picBase.hwnd, rDisplay, 1
+    
+End Sub
+
+Private Sub RenderThumbNail()
+
+    If cImageListNow Is Nothing Then Exit Sub
+    If Not cDIB Is Nothing Then Exit Sub
+    
+    Dim dcCX As Long, dcCY As Long
+    Dim destCx As Long, destCy As Long
+    Dim xRatio As Single, yRatio As Single
+    
+    On Error Resume Next
+    ' determine size of our canvas
+    dcCX = rDisplay.Right - rDisplay.Left + 1
+    dcCY = rDisplay.Bottom - rDisplay.Top + 1
+
+    destCx = cImageListNow.Width
+    destCy = cImageListNow.Height
+    If destCx > dcCX - 20 Or destCy > dcCY - 20 Then
+        xRatio = (dcCX - 20) / destCx
+        yRatio = (dcCY - 20) / destCy
+        If yRatio < xRatio Then xRatio = yRatio
+        destCx = destCx * xRatio
+        destCy = destCy * xRatio
+    End If
+
+    RenderCheckerboard
+    ' render the image
+    cImageListNow.Images.Render m_ItemSelected, picBase.hDC, rDisplay.Left + dcCX \ 2, rDisplay.Top + dcCY \ 2, destCx, destCy, , , , , , , , , True
+    InvalidateRect picBase.hwnd, rDisplay, 1
+    
+End Sub
+
+Private Sub RenderCheckerboard()
+
+    If m_ChkrBoard = False Then
+        picBase.Cls
+        Exit Sub
+    End If
+    
+    On Error Resume Next
+    If cCkrBrd Is Nothing Then
+        ' create the checkerboard pattern
+        Dim dcCX As Long, dcCY As Long
+        ' determine size of our canvas
+        dcCX = rDisplay.Right - rDisplay.Left + 1
+        dcCY = rDisplay.Bottom - rDisplay.Top + 1
+        
+        Set cCkrBrd = New c32bppDIB
+        cCkrBrd.InitializeDIB dcCX - 20, dcCY - 20
+        cCkrBrd.CreateCheckerBoard 7, vbWhite, RGB(210, 210, 210)
+    End If
+    
+    ' render the checkerboard pattern
+    cCkrBrd.Render picBase.hDC, rDisplay.Left + 10, rDisplay.Top + 10
+
+End Sub
+
+Private Sub DoDeleteList()
+
+    On Error GoTo ExitRoutine
+    If Not cDIB Is Nothing Then
+        If cboKey.ListCount <= 2 Then Call cmdAct_Click(cmd_Abort)
+    End If
+    Changed = False
+    cImageListNow.Images.xcom_Clone cloneRelease
+    Set cImageListNow = Nothing
+    uc_ImageControl.ImageLists.Remove cboKey.Text
+    uc_ImageControl.UpdateLists = True
+    picImages.Cls
+    picImages.Enabled = False
+    BuildKeyList
+    m_Dirty = Changed
+
+ExitRoutine:
+'ResetScreen
+If Err Then
+    DoMsgBox Err.Description, mbox_DoNothing, vbOK
+    Err.Clear
+End If
+End Sub
+
+Private Sub DoPaste()
+    
+    On Error GoTo ExitRoutine
+    Dim Index As Long
+    If cDIB Is Nothing Then Set cDIB = New c32bppDIB
+    If cDIB.LoadPicture_ClipBoard() = False Then
+    
+        Index = cDIB.GetPastedFileNames(m_MultiFileList)
+        If Index < 2 Then
+            If m_IndexMultiFile Then
+                For m_IndexMultiFile = lblMultiSelect.LBound To lblMultiSelect.UBound
+                    lblMultiSelect(m_IndexMultiFile).Visible = False
+                Next
+                Erase m_MultiFileKeyTag
+                Erase m_MultiFileMasks
+            End If
+            If Index = vbDefault Then
+                DoMsgBox "Failed to load the pasted image or file(s).", mbox_DoNothing, vbOK
+                Set cDIB = Nothing
+                cmdAct(cmd_Append).Enabled = False
+                cmdAct(cmd_Abort).Visible = False
+            Else
+                m_IndexMultiFile = vbDefault
+                chkUseMask.Tag = "Na": chkUseMask = vbDefault: chkUseMask.Tag = vbNullString
+                txtKeyTag(vbDefault) = vbNullString
+                txtKeyTag(1) = vbNullString
+                LoadExternalImages m_MultiFileList(Index)
+            End If
+            Erase m_MultiFileList
+        
+        Else
+            ReDim m_MultiFileKeyTag(vbDefault To 1, 1 To Index)
+            ReDim m_MultiFileMasks(1 To Index)
+            FillMemory m_MultiFileMasks(1), Index * 4&, 255
+            m_IndexMultiFile = 1
+            LoadExternalImages m_MultiFileList(1)
+        End If
+    Else
+        If m_IndexMultiFile Then
+            For m_IndexMultiFile = lblMultiSelect.LBound To lblMultiSelect.UBound
+                lblMultiSelect(m_IndexMultiFile).Visible = False
+            Next
+            m_IndexMultiFile = vbDefault
+            Erase m_MultiFileList
+            Erase m_MultiFileKeyTag
+            Erase m_MultiFileMasks
+        End If
+        chkUseMask.Tag = "Na": chkUseMask = vbDefault: chkUseMask.Tag = vbNullString
+        txtKeyTag(vbDefault) = vbNullString
+        txtKeyTag(1) = vbNullString
+        LoadExternalImages vbNullString
+    End If
+
+ExitRoutine:
+If Err Then
+    DoMsgBox Err.Description, mbox_DoNothing, vbOK
+    Err.Clear
+    RefreshScroll
+End If
+End Sub
+
+Private Sub DoMsgBox(errString As String, eventID As eMsgBoxActions, btnCap1 As VbMsgBoxResult, _
+                    Optional btnCap2 As VbMsgBoxResult, Optional btnCap3 As VbMsgBoxResult)
+    
+    ' Custom - OnScreen message box
+    ' Why? VB property pages are a little flaky. If a modal window is displayed,
+    ' the property page can reset when the modal window closes.  This makes it
+    ' very hard to return to where you were before the window was shown.
+    
+    ' So I use a on-screen version, requires a little more work but worth it IMO
+    Dim mRect As RECT
+    Const DT_WORDBREAK As Long = &H10
+    Const DT_MULTILINE As Long = (&H1)
+    Const DT_CALCRECT As Long = &H400
+    
+    If btnCap3 = vbDefault Then
+        cmdMsgOk(2).Visible = False
+    Else
+        cmdMsgOk(2).Caption = GetMsgBoxBtn(btnCap3)
+        cmdMsgOk(2).Tag = btnCap3
+        cmdMsgOk(2).Visible = True
+    End If
+    If btnCap2 = vbDefault Then
+        cmdMsgOk(1).Visible = False
+    Else
+        cmdMsgOk(1).Caption = GetMsgBoxBtn(btnCap2)
+        cmdMsgOk(1).Tag = btnCap2
+        cmdMsgOk(1).Visible = True
+    End If
+    cmdMsgOk(vbDefault).Caption = GetMsgBoxBtn(btnCap1)
+    cmdMsgOk(vbDefault).Tag = btnCap1
+    
+    With picMsgBox
+        .AutoRedraw = True
+        mRect.Right = .ScaleWidth - 20
+        DrawText .hDC, errString, -1, mRect, DT_CALCRECT Or DT_MULTILINE Or DT_WORDBREAK
+        OffsetRect mRect, (.ScaleWidth - (mRect.Right - mRect.Left)) \ 2, (cmdMsgOk(vbDefault).Top - (mRect.Bottom - mRect.Top)) \ 2
+        .Cls
+        DrawText .hDC, errString, -1, mRect, DT_MULTILINE Or DT_WORDBREAK
+        .Enabled = True
+        .Visible = True
+        .ZOrder
+    End With
+    If picBase.Visible Then picBase.Enabled = False
+    If picNewList.Visible Then picNewList.Enabled = False
+    picMsgBox.Tag = eventID ' store action required when message box is closed
+    Refresh
+    On Error Resume Next
+    cmdMsgOk(vbDefault).SetFocus
+    If m_BeepOk Then Beep
+End Sub
+
+Private Sub cmdMsgOk_Click(Index As Integer)
+
+    ' Act on the messagebox button that was clicked
+    With picMsgBox
+        .AutoRedraw = False
+        .Visible = False
+        .Enabled = False
+        .ZOrder 1
+    End With
+    If picBase.Visible Then picBase.Enabled = True
+    If picNewList.Visible Then picNewList.Enabled = True
+    
+    On Error Resume Next
+    Select Case Val(picMsgBox.Tag)
+    Case mbox_DoNothing ' do nothing
+    Case mbox_DeleteList ' delete list if "Yes" clicked
+        If Val(cmdMsgOk(Index).Tag) = vbYes Then DoDeleteList
+    Case mbox_UpdateResume, mbox_UpdateAbort ' save/abort/changes
+        Select Case Val(cmdMsgOk(Index).Tag)
+        Case vbNo
+            cImageListNow.Images.xcom_Clone cloneRestore
+            Set cImageListNow = Nothing
+            If Val(picMsgBox.Tag) = mbox_UpdateAbort Then
+                ResetScreen
+            Else
+                Changed = False
+                m_Dirty = False
+                Call cboKey_Click
+            End If
+        Case vbYes
+            If Val(picMsgBox.Tag) = mbox_UpdateAbort Then
+                ResetScreen
+            Else
+                Changed = False
+                m_Dirty = False
+                Call cboKey_Click
+            End If
+        Case vbCancel
+            
+        End Select
+    Case mbox_KeyRedoImage ' return to the Key field
+        txtKeyTag(vbDefault).SetFocus
+        Changed = True
+        m_Dirty = True
+    Case mbox_KeyRedoList ' return to the new list Key field
+        txtILID(vbDefault).SetFocus
+    Case mbox_WidthRedo  ' return to the new list Width field
+        txtILID(1).SetFocus
+    Case mbox_HeightRedo  ' return to the new list Height field
+        txtILID(2).SetFocus
+    Case mbox_RefreshAll  ' update after msgbox closes
+        uc_ImageControl.UpdateLists = True
+        BuildKeyList
+    Case mbox_DeleteAll  ' delete all imagelists
+        If Val(cmdMsgOk(Index).Tag) = vbYes Then
+            uc_ImageControl.ImageLists.Clear
+            Set cImageListNow = Nothing
+            uc_ImageControl.UpdateLists = True
+            ResetScreen
+        End If
+    End Select
+    picBase.Refresh
+End Sub
+
+Private Function GetMsgBoxBtn(commandID As VbMsgBoxResult) As String
+    Select Case commandID
+    Case vbOK: GetMsgBoxBtn = "&Ok"
+    Case vbCancel: GetMsgBoxBtn = "&Cancel"
+    Case vbYes: GetMsgBoxBtn = "&Yes"
+    Case vbNo: GetMsgBoxBtn = "&No"
+    Case vbRetry: GetMsgBoxBtn = "&Retry"
+    Case vbAbort: GetMsgBoxBtn = "&Abort"
+    End Select
+End Function
+
+Private Function ExtractVBImageList(hFile As Long, sFile As String, bUnicode) As cImageList
+    
+    Dim imageLoc() As Long, imageKeyTag() As String
+    Dim bData() As Byte, sLines() As String
+    Dim bEOF As Boolean
+    Dim imgCx As Long, imgCy As Long
+    Dim sLine As String
+    Dim rwLen As Long, lPointer As Long
+    Dim nrImages As Long, nrLists As Long
+    Dim frxHdr As Long, Index As Long, lstIndex As Long
+    Dim lPropStart As Long, lPropEnd As Long, lArrayPos As Long
+    Dim hFrx As Long
+                        
+    Dim newList As cImageList
+    Dim bParsing As Boolean
+    
+    Dim sFlags(-2 To 7) As String
+    sFlags(-2) = "ComctlLib.ImageList"              ' v5 & v6
+    sFlags(-1) = "Begin MSComctlLib.ImageList"      ' v6
+    sFlags(vbDefault) = "Begin ComctlLib.ImageList" ' v5
+    sFlags(1) = "NumListImages"
+    sFlags(2) = "Picture"
+    sFlags(3) = "ImageWidth"
+    sFlags(4) = "ImageHeight"
+    sFlags(5) = "Key"
+    sFlags(6) = "Object.Tag"
+    sFlags(7) = "End"
+    
+    
+    ReDim bData(1 To 4096)  ' read in 4k of file
+    ReadFile hFile, bData(1), 4096, rwLen, ByVal vbDefault
+    If rwLen < 4096 Then bEOF = True ' file < 4kb
+    
+    'convert read info into string & find flag indicating a vb file of interest
+    sLine = StrConv(bData, vbUnicode)
+    lPropStart = InStr(sLine, "Begin VB")
+    If lPropStart = vbDefault Then Exit Function    ' abort
+    
+    ' look for the flag indicating end of vb properties within file
+    Do
+        lPropEnd = InStr(1, sLine, "Attribute VB_Name", vbTextCompare)
+        If lPropEnd Then    ' found it
+            Exit Do
+        ElseIf bEOF Then
+            Exit Do
+        Else
+            ' resize array to read in more info
+            ReDim bData(1 To UBound(bData) + 1024&)
+            ' reset file pointer to beginning of file & read in the data
+            SetFilePointer hFile, lPropStart, vbDefault, vbDefault
+            ReadFile hFile, bData(1), UBound(bData), rwLen, ByVal vbDefault
+            If rwLen < UBound(bData) Then bEOF = True ' no more lines
+            ' convert ansi to unicode
+            sLine = StrConv(bData, vbUnicode)
+        End If
+    Loop
+    If lPropEnd = vbDefault Then Exit Function ' not found, abort
+    
+    ' now look for image list(s) within the vb file
+    lArrayPos = InStr(lPropStart, sLine, sFlags(-2), vbTextCompare)
+    If lArrayPos = vbDefault Then Exit Function
+    nrLists = 1
+    lPointer = lArrayPos
+    Do
+        lPointer = InStr(lPointer + 1, sLine, sFlags(-2), vbTextCompare)
+        If lPointer Then
+            nrLists = nrLists + 1
+        Else
+            Exit Do
+        End If
+    Loop
+    
+    CopyMemory bData(1), bData(lArrayPos), (lPropEnd - lArrayPos)
+    ReDim Preserve bData(1 To (lPropEnd - lArrayPos))
+    sLines = Split(StrConv(bData, vbUnicode), vbCrLf)
+    Erase bData
+    sLine = vbNullString
+
+    Index = vbDefault
+    bParsing = True
+    For lstIndex = 1 To UBound(sLines)
+        sLine = Trim$(sLines(lstIndex))
+        For lArrayPos = -1 To 7
+            If StrComp(Left$(sLine, Len(sFlags(lArrayPos))), sFlags(lArrayPos), vbTextCompare) = vbDefault Then
+                Select Case lArrayPos
+                Case vbDefault: ' begninning of new imagelist
+                    bParsing = True
+                    Exit For
+                Case 1: ' number of images
+                    If bParsing Then
+                        nrImages = Val(Mid$(sLine, InStr(sLine, "=") + 1))
+                        If nrImages Then
+                            ReDim imageLoc(1 To nrImages)
+                            ReDim imageKeyTag(1 To 2, 1 To nrImages)
+                            imageLoc(1) = -1
+                        End If
+                    End If
+                    Exit For
+                Case 2: ' start of new image
+                    If nrImages > vbDefault And bParsing Then
+                        Index = Index + 1
+                        lPointer = InStr(1, sLine, ".frx"":", vbTextCompare)
+                        If lPointer Then
+                            imageLoc(Index) = Val("&H" & Mid$(sLine, lPointer + 6))
+                            If Index = 1 And hFrx = vbDefault Then ' extract the frx file name
+                                lPropStart = InStrRev(sLine, Chr$(34), lPointer)
+                                If lPropStart = vbDefault Then Exit Function
+                                sFile = Left$(sFile, InStrRev(sFile, "\")) & Mid$(sLine, lPropStart + 1, lPointer - lPropStart + 3)
+                                hFrx = iparseGetFileHandle(sFile, True, bUnicode)
+                                If hFrx = -1 Then Exit Function ' can't open the frx file
+                                CloseHandle hFile
+                                hFile = hFrx
+                            End If
+                        Else
+                            imageLoc(Index) = -1
+                        End If
+                    End If
+                    Exit For
+                Case 3: ' width
+                    If bParsing Then imgCx = Val(Mid$(sLine, InStr(sLine, "=") + 1))
+                    Exit For
+                Case 4: ' height
+                    If bParsing Then imgCy = Val(Mid$(sLine, InStr(sLine, "=") + 1))
+                    Exit For
+                Case 5, 6: ' image key,tag
+                    If nrImages > vbDefault And bParsing Then
+                        sLine = Trim$(Mid$(sLine, InStr(sLine, "=")))
+                        lPointer = InStr(sLine, """")
+                        If lPointer Then imageKeyTag(lArrayPos - 4, Index) = Mid$(sLine, lPointer + 1, Len(sLine) - lPointer - 1)
+                        Exit For
+                    End If
+                Case 7: ' end of imagelist
+                    ' process the image list
+                    If LCase(sLine) = "end" And bParsing Then
+                        If Index Then
+                            lArrayPos = vbDefault
+                            sLine = imgCx & "x" & imgCy
+                            nrImages = Index
+                            Do
+                                If uc_ImageControl.ImageLists.IsKeyAssigned(sLine) = vbDefault Then Exit Do
+                                lArrayPos = lArrayPos + 1
+                                sLine = imgCx & "x" & imgCy & "(" & lArrayPos & ")"
+                            Loop
+                            Set newList = uc_ImageControl.ImageLists.Add(imgCx, imgCy, sLine, nrImages)
+                            If newList Is Nothing Then
+                                Stop
+                            Else
+                                lPropEnd = vbDefault
+                                For Index = 1 To nrImages
+                                    If imageLoc(Index) <> -1 Then
+                                        SetFilePointer hFile, imageLoc(Index), vbDefault, vbDefault
+                                        ReadFile hFile, frxHdr, 4&, rwLen, ByVal vbDefault  ' get size of header + image
+                                        SetFilePointer hFile, imageLoc(Index) + 24, vbDefault, vbDefault   ' move another 28 bytes (size of header for images)
+                                        ReadFile hFile, frxHdr, 4&, rwLen, ByVal vbDefault
+                                        If frxHdr > lPropEnd Then
+                                            ReDim bData(1 To frxHdr)
+                                            lPropEnd = frxHdr
+                                        End If
+                                        ReadFile hFile, bData(1), frxHdr, rwLen, ByVal vbDefault
+                                        If rwLen = frxHdr Then
+                                            newList.Images.AddImage_fromStream bData(), , imageKeyTag(1, Index), imageKeyTag(2, Index), 1, frxHdr
+                                        End If
+                                    End If
+                                Next
+                            End If
+                        End If
+                        nrLists = nrLists - 1
+                        nrImages = vbDefault
+                        Index = vbDefault
+                        bParsing = False
+                    End If
+                End Select
+            End If
+        Next
+        If nrLists = vbDefault Then Exit For
+    Next
+    
+    Set ExtractVBImageList = newList
+End Function
+
+Private Sub LoadExternalImages(ByVal sFilename As String)
+
+    On Error GoTo ExitRoutine
+    Dim cX As Long, cY As Long
+
+    If sFilename = vbNullString Or m_IndexMultiFile = vbDefault Then
+        lblMultiSelect(vbDefault).Visible = False
+        lblMultiSelect(1).Visible = False
+        lblMultiSelect(2).Visible = False
+        If sFilename = vbNullString Then
+            cmdAct(cmd_Append).Enabled = True
+            cmdAct(cmd_Abort).Visible = True
+            RenderSample
+            txtKeyTag(vbDefault).SetFocus
+        Else
+            If Not cImageListNow Is Nothing Then
+                cX = cImageListNow.Width
+                cY = cImageListNow.Height
+            End If
+            If cDIB.LoadPicture_File(sFilename, cX, cY, True) Then
+                Call LoadIconSizes
+                cmdAct(cmd_Append).Enabled = True
+                cmdAct(cmd_Abort).Visible = True
+                txtKeyTag(vbDefault).SetFocus
+'                If chkUseMask.Value = 1 Then cDIB.MakeTransparent lblMaskColor.ForeColor
+                RenderSample
+            Else
+                DoMsgBox "Failed to load the selected file.", mbox_DoNothing, vbOK
+                cmdAct(cmd_Append).Enabled = False
+                cmdAct(cmd_Abort).Visible = False
+                RenderThumbNail
+            End If
+        End If
+    Else
+        Call lblMultiSelect_Click(-1)
+        ' when we get back here, 1 of 2 things happened
+        If cDIB Is Nothing Then ' no selected files were image files
+            DoMsgBox "Failed to load the selected file(s).", mbox_DoNothing, vbOK
+        ElseIf m_IndexMultiFile Then ' at least one was & if more than one, enable navigation
+            lblMultiSelect(vbDefault).Visible = True
+            lblMultiSelect(1).Visible = True
+            lblMultiSelect(2).Visible = True
+            cmdAct(cmd_Append).Enabled = True
+            cmdAct(cmd_Abort).Visible = True
+        End If
+    End If
+
+ExitRoutine:
+If Err Then
+    Set cDIB = Nothing
+    DoMsgBox Err.Description, mbox_DoNothing, vbOK
+    Err.Clear
+End If
+
+End Sub
